@@ -1,0 +1,1651 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Homburg</title>
+<meta name="description" content="A Peirce sheet. Type a logical graph in a line and see it drawn, tried, said in words, and heard.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='9' fill='%237e7e7e'/><rect x='26' y='21' width='12' height='22' fill='%23d6d6d6'/><g fill='%23262626'><rect x='4' y='46' width='12' height='5'/><rect x='48' y='46' width='12' height='5'/><rect x='19' y='13' width='5' height='38'/><rect x='19' y='13' width='11' height='5'/><rect x='19' y='46' width='11' height='5'/><rect x='40' y='13' width='5' height='38'/><rect x='34' y='13' width='11' height='5'/><rect x='34' y='46' width='11' height='5'/></g></svg>">
+<!--
+  HOMBURG. A Peirce sheet, in one file.
+
+  Type a graph in a line, in the manner settled as PROWL on 16 November 2026:
+
+      _[ ... ]_   the sheet        ( ... )   a cut        _( ... )   the scroll
+
+  and the page draws it: the paper with its margin, each cut as a circle, each
+  scroll touching the inner wall of what holds it. The column at the left
+  shows the same sheets as text, in a line or descended, and the switch above
+  it touches the column only. The drawn sheet does not care how it was typed.
+
+  The page asks nothing of whoever uses it and keeps nothing: no storage, no
+  network, no counting.
+
+  The notation, the rules of the picture, the margin, and the owl are User1's.
+  The procedure is eniamb's. The longer account is in notes, beside this file:
+  "prowl - the sheet and the scroll .txt".
+-->
+<style>
+  html, body { height: 100%; margin: 0; }
+  body {
+    background: linear-gradient(to bottom, #707070 0%, #808080 50%, #909090 100%);
+    color: #111; display: flex; flex-direction: column;
+    /* ordinary text at 118 percent of what it first was (User1, 17 xi 2026; 150 was tried and was too much): 15px became 17.7 */
+    font: 17.7px/1.42 Iosevka, 'Iosevka Term', ui-monospace, Consolas, 'DejaVu Sans Mono', monospace;
+  }
+  button {
+    font: inherit; background: #b0b0b0; color: #111; border: 1px solid #5e5e5e;
+    border-radius: 3px; padding: 2px 10px; cursor: pointer;
+  }
+  button:hover { background: #cacaca; border-color: #000; }
+  /* what is active wears a light blue wash, so that a glance says "such it is" (User1, 17 xi 2026) */
+  button.on { background: #b4cde6; border-color: #16324f; color: #000; }
+  button.on:hover { background: #c3d8ec; border-color: #000; }
+  #top { display: flex; align-items: center; gap: 8px; padding: 8px 14px; border-bottom: 1px solid #5e5e5e; }
+  /* the hat and the name at 124 percent of the text about them, and set solid: type here is not tracked out */
+  #hat { color: #000; white-space: pre; margin-right: 2px; font-size: 124%; }
+  #brand { color: #fff; font-weight: 600; margin-right: 10px; font-size: 124%; }
+  #work { flex: 1; min-height: 0; display: flex; }
+  /* the trackways: charcoal on the page's own colour, so that they are function and nothing more */
+  * { scrollbar-color: #3e3e3e transparent; scrollbar-width: thin; }
+  ::-webkit-scrollbar { width: 9px; height: 9px; }
+  ::-webkit-scrollbar-track, ::-webkit-scrollbar-corner { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #3e3e3e; border-radius: 5px; }
+  #status {
+    flex: 0 0 auto; height: 1.6em; line-height: 1.6em; padding: 2px 14px; font-size: 15.3px; color: #161616;
+    border-top: 1px solid #5e5e5e; background: rgba(0, 0, 0, .10); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  #views { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; padding: 1px 0 7px; font-size: 16.5px; }
+  #music { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; padding: 0 0 7px; font-size: 16.5px; }
+  #views .lab, #music .lab { margin-right: 4px; }
+  #views .lab.next { margin-left: 16px; }
+  #film { flex: 0 0 auto; padding: 6px 14px 8px; border-top: 1px solid #5e5e5e; }
+  #strip { display: block; width: 100%; height: 26px; border: 1px solid #3a3a3a; box-sizing: border-box; background: #808080; }
+  /* the words in a box directly above the line and set in its size, with Formalize at the end; the two boxes share a wall */
+  #wordsrow { display: flex; align-items: stretch; gap: 8px; }
+  #words {
+    flex: 1; min-width: 0; box-sizing: border-box; background: #b8b8b8; color: #000;
+    border: 1px solid #5e5e5e; border-bottom: 0; border-radius: 3px 3px 0 0; padding: 6px 10px; outline: none;
+    font: 21.2px/1.4 Iosevka, 'Iosevka Term', ui-monospace, Consolas, 'DejaVu Sans Mono', monospace;
+  }
+  #words:focus { border-color: #000; box-shadow: 0 1px 0 #000; }
+  #words.old { color: #444; }
+  #formalize { align-self: center; margin-bottom: 4px; }
+  #col { flex: 0 0 20.5em; width: 20.5em; display: flex; flex-direction: column; min-height: 0; border-right: 1px solid #5e5e5e; }
+  #form { padding: 8px 12px; display: flex; gap: 6px; border-bottom: 1px solid #5e5e5e; }
+  #list { flex: 1; overflow-y: auto; padding: 4px 0 10px; }
+  /* each example a card, slightly embossed, on a ground lighter than the column's; and each form on a ground
+     lighter still, the paper's own tone, as it will look when it is summoned to the paper */
+  .ex {
+    margin: 7px 8px; padding: 6px 8px 8px; background: #8e8e8e; border-radius: 3px; cursor: pointer;
+    box-shadow: inset 1px 1px 0 rgba(255, 255, 255, .40), inset -1px -1px 0 rgba(0, 0, 0, .32), 0 1px 2px rgba(0, 0, 0, .20);
+  }
+  .ex:hover { background: #979797; }
+  .ex.same { background: #a0a0a0; box-shadow: inset 3px 0 0 #fff, inset 1px 1px 0 rgba(255, 255, 255, .40), inset -1px -1px 0 rgba(0, 0, 0, .32), 0 1px 2px rgba(0, 0, 0, .20); }
+  /* the user's own sheet: the whole tile washed in the same blue, because the user has enlivened it */
+  .ex.mine, .ex.mine:hover { cursor: default; background: #a9c3dc; box-shadow: inset 1px 1px 0 rgba(255, 255, 255, .55), inset -1px -1px 0 rgba(0, 0, 0, .32), 0 1px 2px rgba(0, 0, 0, .20); }
+  .ex.mine pre { background: #cbdaea; border-color: #4a6480; }
+  .ex .say { font-size: 15.3px; color: #161616; }
+  .ex pre {
+    margin: 5px 0 0; padding: 5px 8px; font: inherit; color: #000; white-space: pre; overflow-x: auto;
+    background: var(--paper, #b8b8b8); border: 1px solid #666; border-radius: 2px;
+  }
+  #main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+  #edit { padding: 10px 14px 6px; border-bottom: 1px solid #5e5e5e; background: rgba(0, 0, 0, .07); }
+  #line {
+    /* the brightest ground on the page, since everything else follows from what is typed here (User1: "lucky #eef2f6") */
+    width: 100%; box-sizing: border-box; background: #eef2f6; color: #000;
+    border: 1px solid #5e5e5e; border-radius: 0 3px 3px 3px; padding: 6px 10px; outline: none;
+    font: 21.2px/1.4 Iosevka, 'Iosevka Term', ui-monospace, Consolas, 'DejaVu Sans Mono', monospace;
+  }
+  #line:focus { border-color: #000; }
+  #line.bad { border-color: #6b1a10; }
+  /* the tests: names at the left, the verdict beneath them, and Solve held at the right end, where it stays put
+     whatever the name buttons do */
+  #tests { min-height: 2em; padding-top: 7px; display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; align-items: start; font-size: 16.5px; }
+  #chips { display: flex; flex-wrap: wrap; gap: 6px 8px; align-items: center; }
+  #chips button { text-align: left; }
+  #verdict { grid-column: 1 / 3; min-height: 1.4em; }
+  #solve { min-width: 13ch; }
+  #verdict.plaint { color: #4f1007; }
+  #sheet { flex: 1; min-height: 0; overflow: hidden; }
+  #paper { display: block; }
+  #sheet.stale svg { opacity: .55; }
+  #paper text { font-family: Iosevka, 'Iosevka Term', ui-monospace, Consolas, 'DejaVu Sans Mono', monospace; user-select: none; }
+  #paper .pick { cursor: pointer; }
+  .panel {
+    position: fixed; left: 50%; top: 56px; transform: translateX(-50%); z-index: 5;
+    width: min(820px, calc(100vw - 40px)); max-height: calc(100vh - 90px); overflow: auto;
+    background: #b8b8b8; border: 1px solid #000; border-radius: 4px; padding: 16px 22px 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, .35); box-sizing: border-box;
+  }
+  /* each section has a sign beside it, in black with a soft white halo, as Nuage's Help and About have (User1) */
+  .panel dl.secs { display: grid; grid-template-columns: 4.4em 1fr; column-gap: 14px; row-gap: 16px; margin: 0; clear: both; }
+  .panel dl.secs dt {
+    font: 2.3rem/1 'Segoe UI Symbol', 'DejaVu Sans', 'Noto Sans Symbols 2', 'Noto Sans Symbols', 'Apple Symbols', sans-serif;
+    font-variant-emoji: text; text-align: center; white-space: nowrap; color: #000; padding: .1rem 10px 0 0; border-right: 1px solid #8c8c8c;
+    text-shadow: 0 0 2px #fff, 0 0 7px #fff, 0 0 16px rgba(255, 255, 255, .85);
+  }
+  .panel dl.secs dt.few { font-size: 1.15rem; padding-top: .55rem; }
+  .panel dl.secs dt.pair { font-size: 1.7rem; padding-top: .3rem; letter-spacing: -.04em; }
+  .panel dl.secs dt.type { font: 600 1.2rem/1.2 Iosevka, 'Iosevka Term', ui-monospace, Consolas, 'DejaVu Sans Mono', monospace; padding-top: .55rem; }
+  .panel dl.secs dd { margin: 0; min-width: 0; }
+  .panel dl.secs dd h2:first-child { margin-top: 0; }
+  .panel h2 { font-size: 17.7px; margin: 14px 0 4px; letter-spacing: .04em; }
+  .panel h2:first-of-type { margin-top: 0; }
+  .panel p { margin: 6px 0; }
+  .panel pre { margin: 6px 0; font: inherit; white-space: pre; overflow-x: auto; }
+  .panel .x { float: right; }
+  @media (max-width: 760px) {
+    #work { flex-direction: column; }
+    #col { flex: 0 0 auto; width: auto; max-height: 36vh; border-right: 0; border-bottom: 1px solid #5e5e5e; }
+  }
+</style>
+</head>
+<body>
+<noscript>Homburg draws its sheet with a program in the page, and needs JavaScript switched on.</noscript>
+
+<div id="top">
+  <span id="hat" title="_[ ]_ : the blank sheet, and the hat that heads every Peirce sheet. It is to this page what the division sign is to Obelus.">_[ ]_</span>
+  <span id="brand" title="Homburg: the hat _[ ]_ that heads a Peirce sheet.">HOMBURG</span>
+  <button id="m-about" type="button" title="What this page is, and whose.">About</button>
+  <button id="m-rules" type="button" title="The marks, the rules of the sheet, the rules of the picture, and the misspellings.">Rules</button>
+  <button id="m-howto" type="button" title="Notes for whoever next opens this file to change it: the parts, where each begins, and the tricks.">Howto</button>
+</div>
+
+<div id="work">
+  <div id="col">
+    <div id="form">
+      <button id="f-in" type="button" class="on" title="Show the sheets in this column in a line. The drawn sheet is not changed.">Inline</button>
+      <button id="f-de" type="button" title="Show the sheets in this column descended, one complicated thing per line. The drawn sheet is not changed.">Descended</button>
+    </div>
+    <div id="list"></div>
+  </div>
+  <div id="main">
+    <div id="edit">
+      <div id="wordsrow">
+        <input id="words" type="text" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="The sheet, in words"
+               title="The sheet on the paper, said in words. It follows the line beneath. You may also write here, as in: if p then q; not r. Then press Formalize, or Enter, and the words are set as a sheet.">
+        <button id="formalize" type="button" title="Formalize: set the words as a sheet in the line beneath, and on the paper.">Formalize</button>
+      </div>
+      <input id="line" type="text" spellcheck="false" autocomplete="off" autocapitalize="off"
+             aria-label="The sheet, typed in a line"
+             title="The sheet, typed in a line. The drawing follows as you type. A misspelling is named beneath, and the last good drawing stays. Under the line, each name may be set true or false, and Solve steps through the cases in which the sheet stands.">
+      <div id="tests"><span id="chips"></span><button id="solve" type="button" hidden></button><div id="verdict" aria-live="polite"></div></div>
+    </div>
+    <div id="sheet"><svg id="paper" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The Peirce sheet, drawn"></svg></div>
+    <div id="film">
+      <div id="views">
+        <span class="lab" title="How the sheet is drawn. The sheet itself is the same in all three.">View Choices:</span>
+        <button id="v-textbook" type="button" class="on" title="Textbook: perimeters, the margin, the verdict line, and a dot wherever a scroll touches its host.">Textbook</button>
+        <button id="v-bare" type="button" title="Bare: tones and names only. No perimeter, no margin line, no dot.">Bare</button>
+        <button id="v-halic" type="button" title="Halic: when a case is tried, the paper drops to half grey and each form is lit at its perimeter, white if it comes out true and black if false, fading to grey inward and outward. With no case on it shows the Bare picture.">Halic</button>
+        <span class="lab next" title="The march: a slow remapping of the greys of the Halic picture. It shows in Halic, when a case is on.">March:</span>
+        <button id="m-none" type="button" class="on" title="None: the Halic light stands still.">None</button>
+        <button id="m-metal" type="button" title="Metal: ripples travel slowly through the light, like a shine moving over metal. In a true form they run toward its rim, in a false one away from it. The picture stays readable under them.">Metal</button>
+        <button id="m-inversing" type="button" title="Inversing: the light turns slowly over, white to black and back, names and all. Half way round you are looking at the same sheet read the other way, as Peirce's earlier entitative graphs read it: things side by side mean 'or', and every name's truth is turned over. What stood, falls; what fell, stands. Twice in each turn everything passes through grey, and the form comes up again out of it.">Inversing</button>
+      </div>
+      <div id="music">
+        <span class="lab" title="The light of the sheet, read round a closed path and heard. Where the pickup is, the grey under it sounds: white high, black low, grey silent.">Sphere Music:</span>
+        <button id="mu-play" type="button" title="Play: carry the pickup round the ambit and sound what it meets. Needs a case; if none is on, the first case in which the sheet stands is taken.">Play</button>
+        <button id="mu-stop" type="button" title="Stop: the sound and the film halt where they are, and the pickup leaves the paper. Play goes on from the same place.">Stop</button>
+        <button id="mu-rew" type="button" title="Rewind: the pickup goes back to the start of its lap, at the left end.">Rewind</button>
+      </div>
+      <canvas id="strip" height="26" title="The strip: the light met along one lap of the ambit, shown as greys. It is the score. What is at the gate in the middle is what is heard: white high, black low, grey silent."></canvas>
+    </div>
+  </div>
+</div>
+
+<div id="about" class="panel" hidden>
+  <button class="x" type="button" title="Close.">X</button>
+  <dl class="secs">
+  <dt class="type" aria-hidden="true">_[ ]_</dt><dd>
+  <h2>The Homburg</h2>
+  <p>It is not known whether Charles Sanders Peirce wore a Homburg hat. He was an American logician, scientist, mathematician and philosopher, often called the father of pragmatism, and one of the circle in Cambridge, Massachusetts that he called the Metaphysical Club, with William James and Oliver Wendell Holmes Jr., later a Justice of the Supreme Court. He may well have worn one: the Homburg came into fashion in the 1880s, in the last thirty years of his life, as the top hat was beginning to give way.</p>
+  <p>Unlike a top hat, a Homburg is known for the crease along the middle of its crown, which our Homburg form, <b>_[ ]_</b>, has in its single space. We take his hat as an enclosure for his rules of logic on a sheet of paper. In his case that was often, it is said, the verso, the reverse, of his own old manuscripts. He left so many writings, some hundred thousand pages, that archivists have found difficulty. With gratitude for their work, we have found delight.</p>
+  <p>User1 wrote this account of the name.</p>
+  </dd>
+  <dt aria-hidden="true">⊢</dt><dd>
+  <h2>Peircean logic</h2>
+  <p>This page carries out the rules of a Peirce sheet. Type a graph in the line above the paper and it is drawn: the paper with its margin, each cut as a circle, each scroll touching the wall of what holds it.</p>
+  <p>The graphs are the existential graphs of Charles Sanders Peirce (1839 to 1914). On his sheet, whatever is written is asserted; things side by side are asserted together; and a closed line drawn round something, a cut, denies what it holds. From those three he built all of propositional logic.</p>
+  <p>What was checked, on 17 November 2026: his name and dates, the Club and its members, the Homburg's coming in during the 1880s, and the size of his papers. What was not confirmed: that he wrote on the versos of old manuscripts, which is often said. What is said here of the graphs themselves, and of his shading them, is from memory.</p>
+  </dd>
+  <dt aria-hidden="true">⌨︎</dt><dd>
+  <h2>The typed forms</h2>
+  <p>The way of typing a sheet is PROWL's, settled by User1 with eniamb on 16 November 2026. The hat <b>_[ ]_</b> is the sheet, and gives this page its name. Round brackets are cuts. An underbar before a cut makes it a scroll, read "unless".</p>
+  <p>The whole of the main pane is the paper, and takes the window's shape. The column at the left shows each sheet as text, in a line or descended. The switch above the column changes the column only. The paper does not care how it was typed.</p>
+  </dd>
+  <dt aria-hidden="true">◎</dt><dd>
+  <h2>The picture</h2>
+  <p>Three rules, User1's. The border is whole: no cut reaches the paper's edge. The sheet has a margin. And the underbar means contact: a scroll touches the inner wall of its host, which for a cut is its line and for the sheet is its margin. The small dot marks the place where the pen did not lift.</p>
+  <p>The paper is toned, between white and the grey of a filled form. Areas inside an odd number of cuts are filled, as Peirce came to shade them.</p>
+  </dd>
+  <dt class="few" aria-hidden="true">○◐●</dt><dd>
+  <h2>Three views</h2>
+  <p>View Choices sets how the sheet is drawn, and changes nothing in it. Textbook has perimeters, the margin, the verdict line and the dots. Bare has tones and names only. Halic, User1's, begins from Bare: when a case is tried the paper drops to half grey and each form is lit at its perimeter, white if it comes out true and black if false, fading to grey inward and outward, and never past the cell that holds it. A true name is white and a false one black. It is meant as a fudge and not as a proper fill. </p>
+  </dd>
+  <dt aria-hidden="true">≋</dt><dd>
+  <h2>The march</h2>
+  <p>Beside the views, March sets the Halic light moving. Metal sends ripples slowly through the greys, toward the rim of a true form and away from the rim of a false one, like a shine passing over metal.</p>
+  <p>Inversing turns the light slowly over, white to black and back, names and all. Half way round you are looking at the same sheet read the other way. Before the existential graphs Peirce made the entitative graphs: the same drawings, with a cut still denying, but with things side by side meaning "or" where here they mean "and". The half-way picture is that reading of the sheet, in the case where every name's truth is turned over: each form that was white is black, and a sheet that stood falls. It is the paper seen from its verso. Twice in each turn everything passes through the middle grey, and the form comes up again out of it. The turning-over is checked by the tests for every sheet and case; the account of the entitative graphs is from memory.</p>
+  </dd>
+  <dt aria-hidden="true">♫︎</dt><dd>
+  <h2>Sphere Music</h2>
+  <p>A pickup is carried round the ambit, a flat ellipse laid along the forms inside the margin, once in eight seconds. The grey it is over is what sounds: white sings high, black sings low, and grey is silence, louder the further from grey. So a true form is heard as a rise toward its rim and a false one as a fall, and crossing a wall is a step. The same lap, shown as greys, is the strip beneath the paper, a variable-density sound track in the round; it is the score, and what is at its gate is what is heard. The light is reckoned afresh here as a signed sum, which is the honest form of what Halic paints. It makes no sound until Play is pressed.</p>
+  </dd>
+  <dt aria-hidden="true">⚖︎</dt><dd>
+  <h2>Trying a case</h2>
+  <p>A sheet put on the paper, from the column or by Formalize, opens in the first case in which it stands, if it has one. No case sets it plain again.</p>
+  <p>Under the line each name can be set true or false, and pressing a name on the paper itself does the same. A name set false is struck through. A form that comes out true is bleached, and one that comes out false is tinted and drawn broken. The page leans the same way, inside its margin: lighter when the sheet stands, darker when it falls. Solve steps through the cases in which it does, and is absent when there are none. Broken means false, not wrong: a false cut inside another is often what makes the outer one true.</p>
+  </dd>
+  <dt aria-hidden="true">❝</dt><dd>
+  <h2>In words</h2>
+  <p>Above the line the sheet is said in words. This is worked out by rule from the sheet itself, so it follows whatever is typed. A cut round one name is "not"; round several, "not both". A cut holding a scroll is "if ... then". A scroll on the sheet is "unless". The words are plain and literal, and will sometimes be clumsier than a person's.</p>
+  <p>The box can also be written in. Write, say, <b>if p then q; not r</b> and press Formalize, or Enter, and the words are set as a sheet. Commas, "and" and semicolons all join; round brackets group. A name spelt like one of the grammar's own words is said, and written, in single quotes: if rain then 'or'. Words you have formalized are left as you wrote them for as long as the sheet is the one they made.</p>
+  </dd>
+  <dt aria-hidden="true">∅</dt><dd>
+  <h2>What it asks</h2>
+  <p>Nothing. It sends nothing and counts nothing. It keeps these things, in this browser only, so that it opens as it was left: the view and whether it marches, the last sheet, and the trues and falses given to it.</p>
+  </dd>
+  <dt class="pair" aria-hidden="true">◉◉</dt><dd>
+  <h2>Ency</h2>
+  <p>Ency, N.C., is our mascot: Noctua Captimus, mousecatcher, the least brother of Athena's owl. He is the two round eyes of <b>_[ (p _(q)) (q _(p)) ]_</b>, and with a head, of <b>_[ ( (p _(q)) (q _(p)) ) ]_</b>. He is excellent at tangency, and the word includes him. User1 named him.</p>
+  </dd>
+  </dl>
+  <p>eniamb, November 2026.</p>
+</div>
+
+<div id="rules" class="panel" hidden>
+  <button class="x" type="button" title="Close.">X</button>
+  <dl class="secs">
+  <dt class="type" aria-hidden="true">( )</dt><dd>
+  <h2>The marks</h2>
+<pre>_[ ... ]_   the sheet. What stands on it is asserted.
+            Things side by side are asserted together.
+( ... )     a cut. Its contents are denied as a whole.
+_( ... )    the scroll: a cut drawn in one stroke with what
+            holds it. Same truth as a cut. Read "unless".</pre>
+  </dd>
+  <dt aria-hidden="true">§</dt><dd>
+  <h2>Rules of the Peirce sheet</h2>
+  <p>1. Both ends of the frame are required: _[ opens and ]_ closes.</p>
+  <p>2. Spaces are never imputed. A space is required between two names, and before every _( . Everywhere else a space is air.</p>
+  <p>3. Any run of spaces counts as one.</p>
+  <p>4. Order on a level is air. The sheet has no left or right.</p>
+  <p>5. A name does not end in an underbar.</p>
+  </dd>
+  <dt aria-hidden="true">↴</dt><dd>
+  <h2>Descended</h2>
+<pre>_[]_        the head, on a line of its own
+()  r       "not:"     an egg, leading its line
+__  q       "unless:"  a stick, leading its line</pre>
+  <p>A line is either peers, or a headword followed by what it holds. The headword also holds the lines indented beneath it. One complicated thing per line.</p>
+  </dd>
+  <dt aria-hidden="true">⊙</dt><dd>
+  <h2>Rules of the picture</h2>
+  <p>1. Whole border. No cut reaches the paper's edge.</p>
+  <p>2. The sheet has a margin.</p>
+  <p>3. The underbar means contact. A scroll in a cut touches the cut's line. A scroll on the sheet rests against the margin.</p>
+  <p>On this paper the last scroll in a cell touches at the right and the first, if there are two, at the left. A third in one cell is drawn free, with a hollow dot, since on one line there is no third place to touch.</p>
+  </dd>
+  <dt aria-hidden="true">✗</dt><dd>
+  <h2>Misspellings</h2>
+<pre>_[ c d b_(n) ]_     no space before _(
+_[ a ]              no closing ]_
+_[ p_ (q) ]_        a name ending in an underbar
+_[ (p _(q) ]_       a cut left open
+_[ (p __ q) ]_      the stick in a line; there the scroll is _( )</pre>
+  </dd>
+  </dl>
+</div>
+
+<div id="howto" class="panel" hidden>
+  <button class="x" type="button" title="Close.">X</button>
+  <dl class="secs">
+  <dt aria-hidden="true">⚙︎</dt><dd>
+  <h2>The parts</h2>
+  <p>Homburg is one file, homburg.html, with no libraries and nothing fetched. These are notes from eniamb to whoever next opens it to change it. Each part named below begins, in the file, with a comment in capitals. Search for the words given.</p>
+  <p>The program is in two halves. The first needs no page: it reads a sheet, weighs it, says it, lays it out and reckons its light, and can be run by itself. The second, after THE PAGE, draws and listens. The tests live beside the file and use only the first half: <b>node homburg.test.js homburg.html</b></p>
+  </dd>
+  <dt aria-hidden="true">✂︎</dt><dd>
+  <h2>Reading a sheet</h2>
+  <p>Search: THE READER. tokens() cuts the line into marks and names, readInline() builds the sheet, and readDescended() reads the descended form. A name is { k: 'n', v } and a cut is { k: 'c', scroll, kids }, and each remembers its place in the line. Anything wrong is thrown as a Misspelt, with a message and a place, and the page shows both.</p>
+  <p>The trick: a space is demanded before every _( , so that p_(q) can never be mistaken for a name p_ beside a cut.</p>
+  </dd>
+  <dt aria-hidden="true">⊨</dt><dd>
+  <h2>Truth</h2>
+  <p>value() and holds() give a sheet's truth in a case. census() counts the cases in which it stands. solutions() lists them, the most affirmed first, and is what Solve steps through. shapeKey() writes a sheet with order taken out, which is how the page knows that two sheets are one.</p>
+  </dd>
+  <dt aria-hidden="true">⊕</dt><dd>
+  <h2>The picture</h2>
+  <p>Search: THE PICTURE, then THE SHEET. picture(sheet, measure, room) returns circles, names, a paper and a margin. Each cell lays what it holds along one diameter. The last scroll goes at the right end and the cell's circle is drawn through its far point, so the two touch there and nowhere else. Given the room of the pane, the paper is the pane.</p>
+  <p>The trick: nothing is solved for. Tangency is made by construction, and then checked by measurement in the tests.</p>
+  </dd>
+  <dt aria-hidden="true">✎︎</dt><dd>
+  <h2>Drawing, and the three views</h2>
+  <p>Search: THE TONES, THE THREE VIEWS. drawPaper() draws Textbook and Bare, and drawHalic() draws Halic. The tones are a handful of named greys at the head of that part; change them there. In Halic the whites of a cell are laid before the blacks, so that the order of typing does not show, and each form's outward light is clipped to the cell that holds it.</p>
+  </dd>
+  <dt aria-hidden="true">≋</dt><dd>
+  <h2>The march</h2>
+  <p>Search: THE MARCH. One SVG filter holds a table of 64 greys, and marchTable() rewrites it every frame. Metal adds a travelling wave. Inversing swings every grey about the middle by a cosine. The speeds are MARCH_SECONDS and TURN_SECONDS.</p>
+  </dd>
+  <dt aria-hidden="true">⇄</dt><dd>
+  <h2>Words, and Formalize</h2>
+  <p>Search: THE SHEET IN WORDS, FORMALIZE. sense() turns a sheet into a small formula, say() speaks the formula, and formalize() reads words back into a sheet. The tests keep them honest by sending every sheet out into words and back, and comparing truth in every case. That check has already caught a comma that read as "and" where "or" was meant.</p>
+  <p>The trick: do not trust the wording. Test the meaning.</p>
+  </dd>
+  <dt aria-hidden="true">♪</dt><dd>
+  <h2>Sphere Music</h2>
+  <p>Search: SPHERE MUSIC, THE SCORE, THE VOICE. lightAt() reckons the signed light at a point. lapTable() samples it round the ambit. scoreOf() turns the lap into two curves, pitch and loudness. lay() puts those curves on a fresh oscillator each time the sheet or the case changes, and fades the old one out. One gate before the loudspeaker does Stop.</p>
+  <p>The trick, learned the hard way: never cancel a curve that is running. Browsers disagree about what that means, and one of them left the sound on. Make a new voice and let the old one go. The pickup on the paper is drawn from the audio clock, so eye and ear cannot drift apart.</p>
+  </dd>
+  <dt aria-hidden="true">⌂</dt><dd>
+  <h2>What is kept</h2>
+  <p>Search: KEPT. One entry in the browser's local storage, homburg.last, holds the line, the case, the view and the march. Nothing else is stored, and nothing is sent.</p>
+  </dd>
+  <dt aria-hidden="true">☞︎</dt><dd>
+  <h2>Changing things</h2>
+  <p>To add a sheet to the column, add a line to EXAMPLES: a caption and an inline form. The page reads every example as it opens, and will stop with an error if one is misspelt, so look at the page after adding one.</p>
+  <p>Pitch is BASE and RANGE. Loudness is LOUD. A lap takes SLOW seconds. The reach of a form's light is REACH. The limit on how large the forms grow is GROW. The size of the text is the one font line in the body's style.</p>
+  </dd>
+  <dt aria-hidden="true">✓</dt><dd>
+  <h2>The tests</h2>
+  <p>homburg.test.js runs in node, with no browser. It tries every case of each sheet for its truth, sends sheets through both typed forms and through words and back, tries the misspellings, measures the picture for touching and clearance, and checks the light and the score. If you change a rule, change its test first and watch it fail.</p>
+  <p>What the tests cannot do is see or hear. Look at the page and listen to it, in more than one browser. It was tested on User1's side in LibreWolf, by eye and by ear. On eniamb's side it was seen and heard in Chromium 152, and run in Firefox 159 and WebKit 27.2, where no sound device was to be had and the sound was checked in each engine's offline renderer instead.</p>
+  </dd>
+  </dl>
+  <p>eniamb, November 2026.</p>
+</div>
+
+<div id="status" role="status" title="The last thing done.">Ready.</div>
+
+<script>
+'use strict';
+/* ==========================================================================
+   THE READER. No page in it: it can be run and tested on its own.
+   A name is { k:'n', v, at, end }. A cut is { k:'c', scroll, kids, at, end }.
+   A sheet is { kids }. at and end are places in the typed text.
+   ========================================================================== */
+var NAME_RE = /[A-Za-z0-9](?:[A-Za-z0-9_'\-]*[A-Za-z0-9'])?/y;
+
+function Misspelt(message, at) { this.message = message; this.at = at; }
+
+function tokens(text) {
+  var out = [], i = 0, aired = true;            /* aired: the start, or a space just before */
+  while (i < text.length) {
+    var ch = text.charAt(i), two = text.substr(i, 2);
+    if (ch === ' ' || ch === '\t' || ch === '\r' || ch === '\n') { aired = true; i++; continue; }
+    if (two === '_[') { out.push({ t: '_[', at: i, end: i + 2 }); i += 2; }
+    else if (two === ']_') { out.push({ t: ']_', at: i, end: i + 2 }); i += 2; }
+    else if (two === '_(') {
+      if (!aired) throw new Misspelt('a space is wanted before _(', i);
+      out.push({ t: '_(', at: i, end: i + 2 }); i += 2;
+    }
+    else if (two === '__') {
+      if (text.charAt(i + 2) === '_') throw new Misspelt('three underbars; the stick is two', i);
+      if (!aired) throw new Misspelt('a space is wanted before __', i);
+      out.push({ t: '__', at: i, end: i + 2 }); i += 2;
+    }
+    else if (ch === '(' || ch === ')') { out.push({ t: ch, at: i, end: i + 1 }); i++; }
+    else if (ch === '[' || ch === ']') throw new Misspelt('a square bracket without its underbar', i);
+    else if (ch === '_') throw new Misspelt('a loose underbar', i);
+    else {
+      NAME_RE.lastIndex = i;
+      var m = NAME_RE.exec(text);
+      if (!m) throw new Misspelt('not a mark and not a name: ' + ch, i);
+      out.push({ t: 'name', v: m[0], at: i, end: i + m[0].length }); i += m[0].length;
+    }
+    aired = false;
+  }
+  return out;
+}
+
+/* things side by side, up to a closing mark or the end */
+function things(toks, k) {
+  var got = [];
+  while (k < toks.length) {
+    var t = toks[k];
+    if (t.t === ')' || t.t === ']_') break;
+    if (t.t === '_[') throw new Misspelt('a sheet inside a sheet', t.at);
+    if (t.t === '__') throw new Misspelt('__ belongs to the descended form; in a line the scroll is _( )', t.at);
+    if (t.t === '(' || t.t === '_(') {
+      var r = things(toks, k + 1);
+      if (r.k >= toks.length || toks[r.k].t !== ')') throw new Misspelt('a cut left open', t.at);
+      got.push({ k: 'c', scroll: t.t === '_(', kids: r.got, at: t.at, end: toks[r.k].end });
+      k = r.k + 1;
+    } else {
+      got.push({ k: 'n', v: t.v, at: t.at, end: t.end });
+      k++;
+    }
+  }
+  return { got: got, k: k };
+}
+
+function readInline(text) {
+  var toks = tokens(text);
+  if (!toks.length) throw new Misspelt('a sheet opens with _[', 0);
+  if (toks[0].t !== '_[') throw new Misspelt('a sheet opens with _[', toks[0].at);
+  var r = things(toks, 1);
+  if (r.k >= toks.length) throw new Misspelt('a sheet closes with ]_', text.length);
+  if (toks[r.k].t !== ']_') throw new Misspelt('a closing mark with nothing to close', toks[r.k].at);
+  if (r.k !== toks.length - 1) throw new Misspelt('something stands after the closing ]_', toks[r.k + 1].at);
+  return { kids: r.got };
+}
+
+/* The descended form, by the rule of User1's eyes: one complicated thing per
+   line. _[]_ at the head. A line is peers, or a headword ( () or __ ) leading
+   the line and followed by what it holds; the headword also holds the lines
+   indented beneath it. _() is the stick's long spelling. */
+function readDescended(text) {
+  var rows = [];
+  text.split('\n').forEach(function (raw) {
+    if (!raw.trim()) return;
+    var lead = raw.slice(0, raw.length - raw.replace(/^[ \t]+/, '').length);
+    if (lead.indexOf('\t') >= 0) throw new Misspelt('spaces, not tabs, for the indent', 0);
+    rows.push({ ind: lead.length, line: raw.trim() });
+  });
+  if (!rows.length || rows[0].line !== '_[]_') throw new Misspelt('a descended sheet opens with _[]_ on its own line', 0);
+  var head = rows[0].ind; rows = rows.slice(1);
+
+  function onlyNames(toks, line) {
+    return toks.map(function (t) {
+      if (t.t === '(' || t.t === '_(' || t.t === '__') throw new Misspelt('one complicated thing per line, and the headword leads it: ' + line, 0);
+      if (t.t === ')') throw new Misspelt('a closing mark with nothing to close: ' + line, 0);
+      if (t.t !== 'name') throw new Misspelt('a sheet inside a sheet', 0);
+      return { k: 'n', v: t.v };
+    });
+  }
+  function block(k, depth) {
+    var got = [];
+    while (k < rows.length) {
+      var row = rows[k];
+      if (row.ind < depth) break;
+      if (row.ind > depth) throw new Misspelt('indented lines with no owner: ' + row.line, 0);
+      var toks = tokens(row.line), first = toks[0].t;
+      k++;
+      if (first === '__' || first === '(' || first === '_(') {
+        var after;
+        if (first === '__') after = toks.slice(1);
+        else {
+          if (toks.length < 2 || toks[1].t !== ')') throw new Misspelt('here a pair holds nothing between its marks; write () r and not (r): ' + row.line, 0);
+          after = toks.slice(2);
+        }
+        var inner = onlyNames(after, row.line);
+        if (k < rows.length && rows[k].ind > depth) { var b = block(k, rows[k].ind); inner = inner.concat(b.got); k = b.k; }
+        got.push({ k: 'c', scroll: first !== '(', kids: inner });
+      } else {
+        got = got.concat(onlyNames(toks, row.line));
+        if (k < rows.length && rows[k].ind > depth) throw new Misspelt('indented lines with no owner: ' + rows[k].line, 0);
+      }
+    }
+    return { got: got, k: k };
+  }
+  if (!rows.length) return { kids: [] };
+  if (rows[0].ind <= head) throw new Misspelt('the contents must be indented beneath _[]_', 0);
+  var r = block(0, rows[0].ind);
+  if (r.k !== rows.length) throw new Misspelt('a line outside the sheet: ' + rows[r.k].line, 0);
+  return { kids: r.got };
+}
+
+/* ---- writing a sheet back out, in either form ---- */
+function writeInline(sheet) {
+  function one(n) {
+    if (n.k === 'n') return n.v;
+    var first = n.kids[0], air = first && first.k === 'c' && first.scroll ? ' ' : '';   /* a space before every _( */
+    return (n.scroll ? '_(' : '(') + air + n.kids.map(one).join(' ') + ')';
+  }
+  return sheet.kids.length ? '_[ ' + sheet.kids.map(one).join(' ') + ' ]_' : '_[ ]_';
+}
+function writeDescended(sheet) {
+  var lines = ['_[]_'];
+  function level(kids, pad) {
+    var ns = kids.filter(function (n) { return n.k === 'n'; }), cs = kids.filter(function (n) { return n.k === 'c'; });
+    if (ns.length) lines.push(pad + ns.map(function (n) { return n.v; }).join(' '));
+    cs.forEach(function (c) { cut(c, pad); });
+  }
+  function cut(c, pad) {
+    var ns = c.kids.filter(function (n) { return n.k === 'n'; }), cs = c.kids.filter(function (n) { return n.k === 'c'; });
+    lines.push(pad + (c.scroll ? '__' : '()') + (ns.length ? ' ' + ns.map(function (n) { return n.v; }).join(' ') : ''));
+    cs.forEach(function (d) { cut(d, pad + '  '); });
+  }
+  level(sheet.kids, '  ');
+  return lines.join('\n');
+}
+
+/* ---- meaning ---- */
+/* the sheet with order taken out, as a string: there is no left or right on it */
+function shapeKey(sheet) {
+  function one(n) {
+    if (n.k === 'n') return 'n:' + n.v;
+    return (n.scroll ? 's' : 'c') + '[' + n.kids.map(one).sort().join(',') + ']';
+  }
+  return '[' + sheet.kids.map(one).sort().join(',') + ']';
+}
+function namesOf(sheet) {
+  var seen = {}, out = [];
+  (function walk(kids) {
+    kids.forEach(function (n) { if (n.k === 'n') { if (!seen[n.v]) { seen[n.v] = 1; out.push(n.v); } } else walk(n.kids); });
+  })(sheet.kids);
+  return out;
+}
+function value(n, cas) {                       /* a name is as the case says; a cut denies its whole */
+  if (n.k === 'n') return !!cas[n.v];
+  return !n.kids.every(function (x) { return value(x, cas); });
+}
+function holds(sheet, cas) { return sheet.kids.every(function (x) { return value(x, cas); }); }
+/* THE OTHER READING. Before the existential graphs Peirce made what he called the entitative graphs: the same
+   drawings read the other way. A cut still denies; but things side by side mean "or", and so the blank sheet is
+   false. (This account of them is from memory.) These two functions read a sheet so. They are here because the
+   Inversing march claims something about them, and a claim on this page is checked: see the tests. */
+function valueOther(n, cas) {
+  if (n.k === 'n') return !!cas[n.v];
+  return !n.kids.some(function (x) { return valueOther(x, cas); });
+}
+function holdsOther(sheet, cas) { return sheet.kids.some(function (x) { return valueOther(x, cas); }); }
+function census(sheet) {                       /* in how many cases the sheet stands */
+  var ns = namesOf(sheet), n = ns.length;
+  if (n > 14) return null;
+  var total = 1 << n, stands = 0;
+  for (var m = 0; m < total; m++) {
+    var cas = {};
+    for (var i = 0; i < n; i++) cas[ns[i]] = !!(m & (1 << i));
+    if (holds(sheet, cas)) stands++;
+  }
+  return { stands: stands, total: total };
+}
+/* ==========================================================================
+   THE SHEET IN WORDS. Done in two steps so that the words can be checked.
+   sense() turns a sheet into a small formula, by rule. say() turns the
+   formula into English. weigh() gives the formula's truth in a case, and the
+   tests hold it against the sheet's own truth in every case: so if a rule
+   here ever said "if p then not q" where the sheet says "p, and not q", it
+   would be caught.
+
+   The rules. A name says itself. A cut denies its contents: one name, "not
+   a"; several things, "not both" or "not all of". A cut holding nothing but
+   a cut is a double cut, and says what the inner one holds. A cut holding
+   scrolls is a promise: what is not in a scroll is the "if", and each
+   scroll is something promised; two scrolls, one "or" the other. A scroll
+   standing on the sheet is "unless". Two promises that mirror each other,
+   (p _(q)) (q _(p)), are "p exactly when q", and a cut round just those
+   two is "p or q, not both".
+   ========================================================================== */
+/* The words the grammar keeps for itself. A sheet may still have a name spelt like one of them, as in
+   _[ (rain _(or)) ]_ . Such a name is said in single quotes, "if rain then 'or'", and read back so (User1). */
+var SHOPTALK = { not: 1, both: 1, all: 1, of: 1, and: 1, or: 1, 'if': 1, then: 1, unless: 1, exactly: 1, when: 1, 'true': 1, 'false': 1 };
+function sense(sheet) {
+  var TRUE = { op: 'true' }, FALSE = { op: 'false' };
+  function isName(n) { return n.k === 'n'; }
+  function isScroll(n) { return n.k === 'c' && n.scroll; }
+  function atom(v) { return { op: 'atom', v: v }; }
+  function promise(c) {                 /* (x _(y)) with one name each: [x, y] */
+    if (c.k !== 'c' || c.scroll || c.kids.length !== 2) return null;
+    var nm = c.kids.filter(isName), sc = c.kids.filter(isScroll);
+    if (nm.length !== 1 || sc.length !== 1 || sc[0].kids.length !== 1 || !isName(sc[0].kids[0])) return null;
+    return [nm[0].v, sc[0].kids[0].v];
+  }
+  function mirrored(a, b) {
+    var x = promise(a), y = promise(b);
+    return x && y && x[0] === y[1] && x[1] === y[0] && x[0] !== x[1] ? x : null;
+  }
+  function items(kids) {                /* what each thing in a run affirms */
+    var out = [], used = [];
+    kids.forEach(function (k, i) {
+      if (used[i]) return;
+      if (isName(k)) { out.push(atom(k.v)); return; }
+      for (var j = i + 1; j < kids.length; j++) {
+        if (used[j] || kids[j].k !== 'c') continue;
+        var m = mirrored(k, kids[j]);
+        if (m) { used[j] = 1; out.push({ op: 'iff', a: atom(m[0]), b: atom(m[1]) }); return; }
+      }
+      out.push(deny(k));
+    });
+    return out;
+  }
+  function all(xs) { return !xs.length ? TRUE : xs.length === 1 ? xs[0] : { op: 'and', xs: xs }; }
+  function affirm(kids) { return all(items(kids)); }
+  function deny(c) {                    /* what a cut says */
+    var kids = c.kids;
+    if (!kids.length) return FALSE;
+    if (kids.length === 1 && kids[0].k === 'c') return affirm(kids[0].kids);          /* a double cut */
+    if (kids.length === 2 && kids[0].k === 'c' && kids[1].k === 'c') {
+      var m = mirrored(kids[0], kids[1]);
+      if (m) return { op: 'xor', a: atom(m[0]), b: atom(m[1]) };
+    }
+    var sc = kids.filter(isScroll), plain = kids.filter(function (k) { return !isScroll(k); });
+    if (sc.length) {
+      var promised = sc.map(function (x) { return affirm(x.kids); });
+      var then = promised.length === 1 ? promised[0] : { op: 'or', xs: promised };
+      return plain.length ? { op: 'if', a: affirm(plain), b: then } : then;
+    }
+    var xs = items(kids);
+    return xs.length === 1 ? { op: 'not', a: xs[0] } : { op: 'nand', xs: xs };
+  }
+  var names = sheet.kids.filter(isName), scrolls = sheet.kids.filter(isScroll),
+      cuts = sheet.kids.filter(function (k) { return k.k === 'c' && !k.scroll; });
+  var parts = [];
+  if (names.length) parts.push({ op: 'names', xs: names.map(function (n) { return atom(n.v); }) });
+  items(cuts).forEach(function (f) { parts.push(f); });
+  scrolls.forEach(function (x) { parts.push({ op: 'unless', a: affirm(x.kids) }); });
+  return { op: 'sheet', parts: parts, emptyCut: sheet.kids.length === 1 && cuts.length === 1 && !cuts[0].kids.length };
+}
+function weigh(f, cas) {
+  function every(xs) { return xs.every(function (x) { return weigh(x, cas); }); }
+  switch (f.op) {
+    case 'atom': return !!cas[f.v];
+    case 'true': return true;
+    case 'false': return false;
+    case 'not': case 'unless': return !weigh(f.a, cas);
+    case 'and': case 'names': case 'sheet': return every(f.xs || f.parts);
+    case 'or': return f.xs.some(function (x) { return weigh(x, cas); });
+    case 'nand': return !every(f.xs);
+    case 'if': return !weigh(f.a, cas) || weigh(f.b, cas);
+    case 'iff': return weigh(f.a, cas) === weigh(f.b, cas);
+    case 'xor': return weigh(f.a, cas) !== weigh(f.b, cas);
+  }
+}
+function say(f) {
+  var SIMPLE = { atom: 1, 'true': 1, 'false': 1, not: 1 };
+  function w(x) { return SIMPLE[x.op] ? say(x) : '(' + say(x) + ')'; }      /* a thing among others keeps its own brackets */
+  function list(xs, word) {
+    var ws = xs.map(w);
+    return ws.length === 2 ? ws[0] + ' ' + word + ' ' + ws[1] : ws.slice(0, -1).join(', ') + ' ' + word + ' ' + ws[ws.length - 1];
+  }
+  switch (f.op) {
+    case 'atom': return SHOPTALK[f.v.toLowerCase()] === 1 ? "'" + f.v + "'" : f.v;
+    case 'true': return 'true';
+    case 'false': return 'false';
+    case 'not': return f.a.op === 'atom' ? 'not ' + say(f.a) : 'not (' + say(f.a) + ')';
+    case 'and': return list(f.xs, 'and');
+    case 'or': return f.xs.map(w).join(' or ');          /* never with commas: a comma joins, and would be read as "and" */
+    case 'nand': return (f.xs.length === 2 ? 'not both ' : 'not all of ') + list(f.xs, 'and');
+    case 'iff': return say(f.a) + ' exactly when ' + say(f.b);
+    case 'xor': return say(f.a) + ' or ' + say(f.b) + ', not both';
+    case 'if':
+      var a = f.a.op === 'if' || f.a.op === 'iff' || f.a.op === 'xor' ? '(' + say(f.a) + ')' : say(f.a);
+      if (f.b.op === 'if') return 'if ' + a + ', then ' + say(f.b);
+      return 'if ' + a + ' then ' + (f.b.op === 'iff' || f.b.op === 'xor' ? '(' + say(f.b) + ')' : say(f.b));
+    case 'unless': return 'unless ' + (f.a.op === 'if' ? '(' + say(f.a) + ')' : say(f.a));
+    case 'names': return f.xs.map(say).join(', ');
+    case 'sheet':
+      if (!f.parts.length) return 'true: the blank sheet';
+      if (f.emptyCut) return 'false: the empty cut';
+      if (f.parts.every(function (x) { return x.op === 'unless'; })) return 'the sheet is true, ' + f.parts.map(say).join(', and ');
+      return f.parts.map(say).join('; ');
+  }
+}
+
+/* FORMALIZE: the words, turned back into a sheet. It reads what say() speaks, and the same things put a little
+   more freely: commas and "and" and semicolons all join; "not", "not both", "not all of", "or", "if ... then",
+   "unless", "exactly when", and ", not both" after an "or" mean what they mean above; round brackets group.
+   Words of the grammar are read without regard to capitals; names keep theirs. A name that is itself one of
+   those words is written in single quotes, 'or', and is then a name and nothing else.
+
+   The sheet it makes is the plain one: "not" is a cut, "if ... then" a cut with a scroll in it, "or" a cut of
+   scrolls, "unless" a scroll where it stands. The tests send every sheet out into words and back through here,
+   and hold the truth of what returns against the truth of what left, in every case. */
+function formalize(text) {
+  var KEY = SHOPTALK;
+  var TRUE = { op: 'true' }, FALSE = { op: 'false' };
+  var src = String(text).replace(/^\s*in words\s*:/i, '').replace(/:\s*the blank sheet/i, '').replace(/:\s*the empty cut/i, '')
+                        .replace(/^\s*the sheet is true\s*,?/i, '').replace(/[.\s]+$/, '');
+  var toks = [], re = /\s*(?:'([^'\s]+)'|([(),;]|[A-Za-z0-9](?:[A-Za-z0-9_'\-]*[A-Za-z0-9'])?))/y, i = 0, m;
+  while (i < src.length) {
+    re.lastIndex = i; m = re.exec(src);
+    if (!m) { if (/^\s*$/.test(src.slice(i))) break; throw new Misspelt('a mark the words do not use: ' + src.slice(i).trim().charAt(0), i); }
+    if (m[1] !== undefined) { toks.push({ w: m[1], key: false, at: m.index }); i = re.lastIndex; continue; }      /* 'quoted': a name, whatever it spells */
+    var w = m[2], low = w.toLowerCase(), mark = /^[(),;]$/.test(w);
+    toks.push({ w: KEY[low] === 1 ? low : w, key: mark || KEY[low] === 1, at: m.index }); i = re.lastIndex;
+  }
+  var k = 0;
+  function is(word, n) { var t = toks[k + (n || 0)]; return !!t && t.key && t.w === word; }
+  function fail(what) { var t = toks[k]; throw new Misspelt(what + (t ? ', at "' + t.w + '"' : ', at the end'), t ? t.at : src.length); }
+  function all(xs) { return xs.length === 1 ? xs[0] : { op: 'and', xs: xs }; }
+  function semi() { var xs = [conj(false)]; while (is(';')) { k++; xs.push(conj(false)); } return all(xs); }
+  function conj(tight) {                           /* tight: inside an "unless", which must not swallow the next "unless" */
+    var xs = [disj()];
+    for (;;) {
+      var step = is(',') && is('and', 1) ? 2 : (is(',') || is('and')) ? 1 : 0;
+      if (!step) break;
+      if (is(',') && is('then', 1)) break;         /* "if z, then ..." */
+      if (tight && is('unless', step)) break;
+      k += step; xs.push(disj());
+    }
+    return all(xs);
+  }
+  function ends(n) { var t = toks[k + n]; return !t || (t.key && (t.w === ';' || t.w === ')' || t.w === ',' || t.w === 'and')); }
+  function disj() {
+    var xs = [unary()];
+    while (is('or')) { k++; xs.push(unary()); }
+    if (xs.length === 2 && is(',') && is('not', 1) && is('both', 2) && ends(3)) { k += 3; return { op: 'xor', a: xs[0], b: xs[1] }; }
+    return xs.length === 1 ? xs[0] : { op: 'or', xs: xs };
+  }
+  function nand(f) { return f.op === 'and' ? { op: 'nand', xs: f.xs } : { op: 'not', a: f }; }
+  function unary() {
+    if (is('not') && is('both', 1)) { k += 2; return nand(conj(false)); }
+    if (is('not') && is('all', 1) && is('of', 2)) { k += 3; return nand(conj(false)); }
+    if (is('not')) { k++; return { op: 'not', a: unary() }; }
+    if (is('if')) {
+      k++; var a = conj(false);
+      if (is(',')) k++;
+      if (!is('then')) fail('"then" was expected');
+      k++; return { op: 'if', a: a, b: conj(false) };
+    }
+    if (is('unless')) { k++; return { op: 'unless', a: conj(true) }; }
+    var p = primary();
+    if (is('exactly') && is('when', 1)) { k += 2; return { op: 'iff', a: p, b: unary() }; }
+    return p;
+  }
+  function primary() {
+    var t = toks[k];
+    if (!t) fail('something more was expected');
+    if (is('(')) { k++; var f = semi(); if (!is(')')) fail('a closing bracket was expected'); k++; return f; }
+    if (is('true')) { k++; return TRUE; }
+    if (is('false')) { k++; return FALSE; }
+    if (t.key) fail('a name was expected');
+    k++; return { op: 'atom', v: t.w };
+  }
+  var f = toks.length ? semi() : TRUE;
+  if (k < toks.length) fail('the words go on past their end');
+
+  function cut(kids, scroll) { return { k: 'c', scroll: !!scroll, kids: kids }; }
+  function nodes(g) {                              /* the things that, standing side by side, affirm g */
+    switch (g.op) {
+      case 'atom': return [{ k: 'n', v: g.v }];
+      case 'true': return [];
+      case 'false': return [cut([])];
+      case 'and': return g.xs.reduce(function (acc, x) { return acc.concat(nodes(x)); }, []);
+      case 'not': return [cut(nodes(g.a))];
+      case 'nand': return [cut(g.xs.reduce(function (acc, x) { return acc.concat(nodes(x)); }, []))];
+      case 'if': return [cut(nodes(g.a).concat([cut(nodes(g.b), true)]))];
+      case 'or': return [cut(g.xs.map(function (x) { return cut(nodes(x), true); }))];
+      case 'iff': return [cut(nodes(g.a).concat([cut(nodes(g.b), true)])), cut(nodes(g.b).concat([cut(nodes(g.a), true)]))];
+      case 'xor': return [cut(nodes({ op: 'iff', a: g.a, b: g.b }))];
+      case 'unless': return [cut(nodes(g.a), true)];
+    }
+  }
+  return { kids: nodes(f) };
+}
+
+/* every case in which the sheet stands, the most affirmed first: all names true, and so down */
+function solutions(sheet) {
+  var ns = namesOf(sheet), n = ns.length, out = [];
+  if (n > 14) return null;
+  for (var m = (1 << n) - 1; m >= 0; m--) {
+    var cas = {};
+    for (var i = 0; i < n; i++) cas[ns[i]] = !!(m & (1 << (n - 1 - i)));
+    if (holds(sheet, cas)) out.push(cas);
+  }
+  return out;
+}
+
+/* ==========================================================================
+   THE PICTURE. Still no page in it: it is given a way to measure a name and
+   returns circles, a paper and a margin, all in one set of units.
+
+   Each cell lays what it holds along one diameter. The last scroll in a cell
+   is set at the right end and the cell's circle is drawn through its far
+   point, so the two touch there and nowhere else. If there are two scrolls,
+   the first is set at the left end the same way. A third has no place on the
+   line to touch, and is drawn free and said to be so.
+
+   On the sheet the wall is the margin, never the paper's edge.
+   ========================================================================== */
+function picture(sheet, M, room) {
+  var F = M.F, GAP = F * 0.6, PAD = F * 0.55, R0 = F * 0.62;
+
+  function arrange(kids) {
+    var sc = kids.filter(function (n) { return n.k === 'c' && n.scroll; });
+    var right = sc.length ? sc[sc.length - 1] : null, left = sc.length > 1 ? sc[0] : null;
+    var mid = kids.filter(function (n) { return n !== right && n !== left; });
+    return { row: (left ? [left] : []).concat(mid, right ? [right] : []), left: left, right: right };
+  }
+  function item(n, o) {
+    if (n.k === 'n') { var w = M.width(n.v); return { n: n, name: true, a: w / 2, b: F * 0.56, ext: w / 2 }; }
+    var g = cell(n);
+    return { n: n, name: false, r: g.R, ext: g.R, g: g, bound: n === o.left || n === o.right, free: n.scroll && n !== o.left && n !== o.right };
+  }
+  function place(items, gap) {
+    var cur = 0;
+    items.forEach(function (it) { it.x = cur + it.ext; cur += 2 * it.ext + gap; });
+    return items.length ? cur - gap : 0;
+  }
+  function reach(it, c) {                      /* how far from c the item's furthest point lies */
+    var d = Math.abs(it.x - c);
+    return it.name ? Math.sqrt((d + it.a) * (d + it.a) + it.b * it.b) : d + it.r;
+  }
+  function cell(n) {
+    var o = arrange(n.kids), items = o.row.map(function (k) { return item(k, o); });
+    if (!items.length) return { R: R0, c: 0, items: [] };
+    var gap = GAP, W, R, c, L = o.left ? items[0] : null, Rt = o.right ? items[items.length - 1] : null;
+    if (L && Rt) {
+      for (var t = 0; t < 400; t++) {
+        W = place(items, gap); c = W / 2; R = W / 2;
+        if (items.every(function (it) { return it === L || it === Rt || reach(it, c) + PAD * 0.6 <= R; })) break;
+        gap += F * 0.1;
+      }
+    } else if (Rt) {
+      W = place(items, gap);
+      R = Math.max(W / 2, Rt.r * 1.3 + PAD * 0.6);
+      for (var u = 0; u < 20000; u++) {
+        c = W - R;
+        if (items.every(function (it) { return it === Rt || reach(it, c) + PAD <= R; })) break;
+        R += 0.25;
+      }
+      c = W - R;
+    } else {
+      W = place(items, gap); c = W / 2; R = 0;
+      items.forEach(function (it) { R = Math.max(R, reach(it, c) + PAD); });
+    }
+    return { R: R, c: c, items: items };
+  }
+
+  /* THE SHEET. Given no room, the paper is cut snug round what stands on it. Given the room of a pane (User1,
+     17 xi 2026: "declaring the entire main pane to be the Peirce sheet"), the paper IS the pane: what stands on
+     it is drawn as large as fits, up to a limit, and the paper takes the pane's own shape round it. Either way
+     the forms that are not bound stand together in the middle, and a scroll standing on the sheet goes out to
+     the margin and rests against it, with whatever open paper lies between. */
+  var o = arrange(sheet.kids), items = o.row.map(function (k) { return item(k, o); });
+  var L = o.left ? items[0] : null, Rt = o.right ? items[items.length - 1] : null;
+  var mids = items.filter(function (it) { return it !== L && it !== Rt; });
+  var gap = GAP * 1.4, Wm = place(mids, gap);
+  var tall = F * 0.56;
+  items.forEach(function (it) { tall = Math.max(tall, it.name ? it.b : it.r); });
+  var PADX = F * 1.3, PADY = F * 1.2, MINW = F * 9, MINH = F * 5.4, MARGIN = F * 1.5, GROW = 2.6;
+  var leftRoom = L ? 2 * L.r + (mids.length || Rt ? gap : 0) : PADX, rightRoom = Rt ? 2 * Rt.r + (mids.length ? gap : 0) : PADX;
+  var boxW = Math.max(MINW, leftRoom + Wm + rightRoom), boxH = Math.max(MINH, 2 * tall + 2 * PADY), scale = null;
+  if (room) {
+    scale = Math.min(GROW, room.w / (boxW + 2 * MARGIN), room.h / (boxH + 2 * MARGIN));
+    boxW = room.w / scale - 2 * MARGIN; boxH = room.h / scale - 2 * MARGIN;
+  }
+  var midAt = leftRoom + (boxW - leftRoom - rightRoom - Wm) / 2;       /* where the middle group begins */
+  mids.forEach(function (it) { it.x += midAt; });
+  if (L) L.x = L.r;
+  if (Rt) Rt.x = boxW - Rt.r;
+  var cy = MARGIN + boxH / 2, x0 = 0;
+  var lo = boxW, hi = 0;
+  items.forEach(function (it) { lo = Math.min(lo, it.x - it.ext); hi = Math.max(hi, it.x + it.ext); });
+  if (!items.length) { lo = boxW / 2 - F * 2; hi = boxW / 2 + F * 2; }
+  var out = {
+    F: F, scale: scale,
+    paper: { x: 0, y: 0, w: boxW + 2 * MARGIN, h: boxH + 2 * MARGIN },
+    box: { x: MARGIN, y: MARGIN, w: boxW, h: boxH },
+    span: { x0: MARGIN + lo, x1: MARGIN + hi },                        /* from the first form to the last */
+    cuts: [], names: []
+  };
+  function draw(items, ox, depth, host) {               /* ox: where the row's zero lies; host: the cut that holds these, or none for the sheet */
+    items.forEach(function (it) {
+      var x = ox + it.x;
+      if (it.name) { out.names.push({ n: it.n, x: x, y: cy, text: it.n.v, depth: depth, a: it.a, b: it.b, host: host || null }); return; }
+      var touch = null;
+      if (it.bound) {
+        var rightward = it === items[items.length - 1];
+        touch = { x: rightward ? x + it.r : x - it.r, y: cy };
+      }
+      var rec = { n: it.n, cx: x, cy: cy, r: it.r, depth: depth + 1, scroll: it.n.scroll, touch: touch, free: it.free, host: host || null };
+      out.cuts.push(rec);
+      draw(it.g.items, x - it.g.c, depth + 1, rec);
+    });
+  }
+  draw(items, MARGIN + x0, 0, null);
+  return out;
+}
+
+/* ==========================================================================
+   SPHERE MUSIC. The light of the sheet, read round a closed path and heard.
+
+   The Halic picture is a fudge laid on with transparent paint. This is the
+   same idea done honestly, as a number and not as paint. At any point of the
+   paper the light is a signed sum about zero: zero is the grey, +1 white,
+   -1 black.
+     - The form the point lies in gives its own light, rising from nothing at
+       its centre to full at its rim; plus if the form comes out true, minus
+       if false. On the open page it is the page that gives it, round, from
+       the middle of the sheet to its margin.
+     - Each form standing directly in that same cell adds the light it throws
+       outward: full at its rim, falling to nothing REACH radii away.
+     - Nothing crosses a wall: a point inside a form hears only that form and
+       what stands in it.
+   The ambit is a flat ellipse laid along the row of forms, a little beyond
+   the first and the last of them, and always inside the margin.
+   One lap of it, sampled, is the strip: the greys the pickup passes over, a
+   variable-density sound track in the round. How the strip is sounded is
+   THE SCORE, below.
+   ========================================================================== */
+var REACH = 0.8;                                  /* how far a form's outward light carries, in its own radii */
+
+function ambitOf(P) {                             /* it follows the forms, not the margin: a little beyond the first and the last */
+  var B = P.box, tall = P.F, edge = P.F * 0.3;
+  P.cuts.forEach(function (c) { if (!c.host) tall = Math.max(tall, c.r); });
+  var x0 = Math.max(B.x + edge, P.span.x0 - P.F * 1.6), x1 = Math.min(B.x + B.w - edge, P.span.x1 + P.F * 1.6);
+  return { cx: (x0 + x1) / 2, cy: B.y + B.h / 2, a: (x1 - x0) / 2, b: Math.min(B.h / 2 - edge, tall * 0.5) };
+}
+function ambitPoint(A, t) {                       /* t from 0 to 1: from the left end, over the top, and back beneath */
+  var w = 2 * Math.PI * t;
+  return { x: A.cx - A.a * Math.cos(w), y: A.cy - A.b * Math.sin(w) };
+}
+function lightAt(P, sheet, cas, x, y) {
+  var B = P.box;
+  if (x < B.x || x > B.x + B.w || y < B.y || y > B.y + B.h) return 0;       /* the band outside the margin is plain grey */
+  function far(c) { var dx = x - c.cx, dy = y - c.cy; return Math.sqrt(dx * dx + dy * dy); }
+  var cell = null, found = true;
+  while (found) {                                 /* the innermost form that holds the point */
+    found = false;
+    for (var i = 0; i < P.cuts.length; i++) {
+      var c = P.cuts[i];
+      if (c.host === cell && far(c) < c.r) { cell = c; found = true; break; }
+    }
+  }
+  var v;
+  if (cell) v = (value(cell.n, cas) ? 1 : -1) * (far(cell) / cell.r);
+  else {
+    var ex = (x - (B.x + B.w / 2)) / (B.w / 2), ey = (y - (B.y + B.h / 2)) / (B.h / 2);
+    v = (holds(sheet, cas) ? 1 : -1) * Math.min(1, Math.sqrt(ex * ex + ey * ey));
+  }
+  P.cuts.forEach(function (k) {
+    if (k.host !== cell) return;
+    var d = far(k) - k.r;
+    if (d >= 0 && d < REACH * k.r) v += (value(k.n, cas) ? 1 : -1) * (1 - d / (REACH * k.r));
+  });
+  return v;                                       /* a true sum: where lights of one sign meet it passes 1, and is not cut off */
+}
+/* one lap of the ambit. Where the summed light passes full, the whole lap is brought down in proportion, so that
+   its shape is kept and nothing is flattened against white or black. */
+function lapTable(P, sheet, cas, N) {
+  var A = ambitOf(P), out = new Float32Array(N), peak = 1;
+  for (var i = 0; i < N; i++) { var q = ambitPoint(A, i / N); out[i] = lightAt(P, sheet, cas, q.x, q.y); peak = Math.max(peak, Math.abs(out[i])); }
+  if (peak > 1) for (var j = 0; j < N; j++) out[j] /= peak;
+  return out;
+}
+/* THE SCORE. The first Sphere Music put the whole lap into every cycle of one tone, so the ear had the whole
+   sheet at once, 110 times a second, and nothing changed as the pickup went round: a loud unrelenting note
+   (User1, on hearing it). The lap is now read in time, as it is seen. Where the pickup is, the grey under it is
+   what sounds:
+       white   sings high     up to RANGE octaves above the BASE
+       black   sings low      down to RANGE octaves below it
+       grey    is silence     and the further from grey, the louder
+   So the strip is the score, and what is at its gate is what is heard. */
+var BASE = 220, RANGE = 1;
+function scoreOf(table) {
+  var N = table.length, freq = new Float32Array(N), raw = new Float32Array(N), gain = new Float32Array(N), i, k;
+  for (i = 0; i < N; i++) { freq[i] = BASE * Math.pow(2, RANGE * table[i]); raw[i] = Math.pow(Math.abs(table[i]), 0.7); }
+  for (i = 0; i < N; i++) {                       /* loudness eased over its neighbours, so that a wall is a step in pitch and not a click */
+    var sum = 0;
+    for (k = -3; k <= 3; k++) sum += raw[(i + k + N) % N];
+    gain[i] = sum / 7;
+  }
+  return { freq: freq, gain: gain };
+}
+
+if (typeof module !== 'undefined') {
+  module.exports = { Misspelt: Misspelt, tokens: tokens, readInline: readInline, readDescended: readDescended,
+    writeInline: writeInline, writeDescended: writeDescended, shapeKey: shapeKey, namesOf: namesOf,
+    value: value, holds: holds, valueOther: valueOther, holdsOther: holdsOther, census: census, solutions: solutions, sense: sense, weigh: weigh, say: say, formalize: formalize, picture: picture,
+    REACH: REACH, ambitOf: ambitOf, ambitPoint: ambitPoint, lightAt: lightAt, lapTable: lapTable, BASE: BASE, RANGE: RANGE, scoreOf: scoreOf };
+}
+/*END-OF-PARTS-WITHOUT-A-PAGE*/
+
+/* ==========================================================================
+   THE PAGE.
+   ========================================================================== */
+(function () {
+  if (typeof document === 'undefined') return;
+  var $ = function (id) { return document.getElementById(id); };
+  var NS = 'http://www.w3.org/2000/svg';
+
+  var EXAMPLES = [
+    ['True: the blank sheet.', '_[ ]_'],
+    ['False: the empty cut.', '_[ () ]_'],
+    ['Assert: a.', '_[ a ]_'],
+    ['Deny: a.', '_[ (a) ]_'],
+    ['The sheet is true, unless a.', '_[ _(a) ]_'],
+    ['If p then q.', '_[ (p _(q)) ]_'],
+    ['The egg above: p, and not q.', '_[ ((p _(q))) ]_'],
+    ['Not both p and q.', '_[ (p q) ]_'],
+    ['A double cut: p and q, the long way.', '_[ ((p q)) ]_'],
+    ['If r then p and q.', '_[ (r _(p q)) ]_'],
+    ['Rain, wet, not dry.', '_[ rain wet (dry) ]_'],
+    ['C, d, b; not r; if z then a.', '_[ c d b (r) (z _(a)) ]_'],
+    ['One step left: c, d, b; not r; not z; unless a.', '_[ c d b (r) (z) _(a) ]_'],
+    ['Two things promised: if z then a and e.', '_[ c d b (r) (z _(a e)) ]_'],
+    ['If z, then if y then a.', '_[ (z _( (y _(a)) )) ]_'],
+    /* names may be whole words, and then a sheet says something a person already knows */
+    ['No smoke without fire.', '_[ (smoke _(fire)) ]_'],
+    ['You cannot have your cake and eat it.', '_[ (have eat) ]_'],
+    ['Sink or swim.', '_[ ( _(sink) _(swim)) ]_'],
+    ['Tea or coffee, not both.', '_[ ( (tea _(coffee)) (coffee _(tea)) ) ]_'],
+    ['If a man then mortal; and a man. Solve finds the rest.', '_[ (man _(mortal)) man ]_'],
+    ['Rain makes wet, wet makes slippery, and it rains.', '_[ (rain _(wet)) (wet _(slippery)) rain ]_'],
+    ['P exactly when q. Ency.', '_[ (p _(q)) (q _(p)) ]_'],
+    ['P or q, not both. Ency, with a head.', '_[ ( (p _(q)) (q _(p)) ) ]_']
+  ];
+
+  var FORM = 'inline';          /* how the column shows its sheets; the paper never asks */
+  var GOOD = null;              /* the last sheet that read, and is drawn */
+  var SYNC = true;              /* whether the line as it stands is that sheet */
+  var CASE = null;              /* a case being tried: name -> true or false; or none */
+
+  /* ---- measuring a name, in the face the paper is set in ---- */
+  var FS = 20, ruler = document.createElement('canvas').getContext('2d');
+  function faceOf() { return getComputedStyle(document.body).fontFamily; }
+  var MEASURE = { F: FS, width: function (s) { ruler.font = FS + 'px ' + faceOf(); return Math.max(FS * 0.55, ruler.measureText(s).width); } };
+
+  function el(tag, attrs, parent) {
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  /* THE TONES. The paper is toned: it sits between white and the grey of a filled form, so that there is room
+     above it and below it. Plain, a cell inside an odd number of cuts is FILLED. When a case is tried, a form
+     that comes out true is BLEACHED and one that comes out false is TINTED. (User1, 16 xi 2026. Not yellowed.) */
+  var INK = '#111', PAPER = '#b8b8b8', FILLED = '#949494', BLEACH = '#e6e6e6', TINT = '#8a8a8a',
+      /* THE PAGE LEANS (User1's question, 16 xi 2026). When a case is tried the page inside its margin takes
+         half the step its forms take: half way to bleach when the sheet stands, half way to tint when it
+         falls. Half, so that a true form still shows lighter than a standing page and a false one darker
+         than a fallen page. The band outside the margin stays toned, and keeps the plain tone in view. */
+      PAGE_UP = '#cfcfcf', PAGE_DOWN = '#a1a1a1',
+      EDGE = '#3a3a3a', FAINT = '#7c7c7c', BROKEN = '#6b1a10', STANDS = '#0e4f1a';
+  document.documentElement.style.setProperty('--paper', PAPER);
+
+  /* THE THREE VIEWS (User1, 16 xi 2026). The sheet is the same in all of them.
+       Textbook   perimeters, the margin, the verdict line, the dots.
+       Bare       tones and names only.
+       Halic      begins from Bare. When a case is tried the paper drops to a true half grey, and every form is
+                  lit at its perimeter: white if it comes out true, black if false, falling to the grey both
+                  inward, to its own centre, and outward, into the cell that holds it and no further. The page
+                  itself is lit the same way inside its margin, round like a ripple and not along its edges, and
+                  has no outer light. With no case on, Halic shows the Bare picture.
+     Halic is a fudge and is meant as one: an honest version would add signed light. Here the whites of a cell
+     are laid together and then the blacks, so that the picture does not depend on which form was typed first.
+     The falloffs are real transparency, as User1 asked: white from #FFFFFFFF, and black from #000000FF, each to
+     #00000000. Fading white toward transparent BLACK makes the light dip a little below the grey before it
+     settles, which is the ripple. */
+  var VIEW = 'textbook';
+  /* THE MARCH (User1, 17 xi 2026). The Halic light is passed through a table that remaps each grey, and the table
+     is changed a little every frame. Two kinds.
+
+     METAL ("a little palette-march ... a very slow cycle"). Each grey maps to itself plus a small wave, and the
+     wave is moved along. Because the light of a true form rises toward its rim and that of a false one falls
+     toward it, the ripples run to the rim of a true form and away from the rim of a false one. The picture stays
+     readable under them. Names are not marched.
+
+     INVERSING ("white on black into black on white, smoothly, edgelessly, then as surely back"). Each grey is
+     swung about the middle grey: out = 1/2 + (in - 1/2) * cos(turn). At the start it is the picture as it is.
+     A quarter of the way round everything is the middle grey. Half way round every white is black and every
+     black white, the names with them. And that half-way picture means something exact: it is the same sheet
+     read as Peirce's entitative graphs read it (side by side is "or"), in the case where every name's truth is
+     turned over. A form white in one reading is black in the other, and a sheet that stands in one falls in the
+     other. That is De Morgan's duality, and it is held to in the tests for every sheet and every case.
+     So the names are marched here too, since on the verso their truth is turned over with the rest. */
+  var MARCH = 'none', MARCH_SECONDS = 2, MARCH_DEPTH = 0.09, MARCH_BANDS = 4, TURN_SECONDS = 12, marching = false;
+  function marchTable(kind, phase) {
+    var out = [], swing = Math.cos(2 * Math.PI * phase);
+    for (var i = 0; i < 64; i++) {
+      var v = i / 63, w = kind === 'inversing' ? 0.5 + (v - 0.5) * swing : v + MARCH_DEPTH * Math.sin(2 * Math.PI * (MARCH_BANDS * v - phase));
+      out.push(Math.max(0, Math.min(1, w)).toFixed(4));
+    }
+    return out.join(' ');
+  }
+  var marchFrom = 0;                              /* when the march began, so that Inversing always starts from the picture as it is */
+  function marchTick() {
+    var fs = document.querySelectorAll('#march feFuncR, #march feFuncG, #march feFuncB');
+    if (MARCH === 'none' || !fs.length) { marching = false; return; }
+    var secs = (performance.now() - marchFrom) / 1000;
+    var t = marchTable(MARCH, (secs / (MARCH === 'inversing' ? TURN_SECONDS : MARCH_SECONDS)) % 1);
+    for (var i = 0; i < fs.length; i++) fs[i].setAttribute('tableValues', t);
+    requestAnimationFrame(marchTick);
+  }
+  var HALF = '#808080', GLOW = REACH;             /* the outer light reaches GLOW radii beyond the perimeter */
+  var gradSeq = 0;
+
+  function halicDefs(svg) {
+    var defs = el('defs', {}, svg), rho = (1 / (1 + GLOW)).toFixed(4);
+    function grad(id, from, inner) {
+      var g = el('radialGradient', { id: id }, defs);
+      if (inner) {                               /* nothing at the centre, full at the perimeter */
+        el('stop', { offset: 0, 'stop-color': '#000000', 'stop-opacity': 0 }, g);
+        el('stop', { offset: 1, 'stop-color': from, 'stop-opacity': 1 }, g);
+      } else {                                   /* full at the perimeter, nothing at the reach of the light */
+        el('stop', { offset: rho, 'stop-color': from, 'stop-opacity': 1 }, g);
+        el('stop', { offset: 1, 'stop-color': '#000000', 'stop-opacity': 0 }, g);
+      }
+    }
+    grad('h-in-w', '#ffffff', true); grad('h-in-b', '#000000', true);
+    grad('h-out-w', '#ffffff', false); grad('h-out-b', '#000000', false);
+    return defs;
+  }
+  function marchFilter(defs, P) {
+    var f = el('filter', { id: 'march', filterUnits: 'userSpaceOnUse', x: P.box.x, y: P.box.y, width: P.box.w, height: P.box.h, 'color-interpolation-filters': 'sRGB' }, defs);
+    var ct = el('feComponentTransfer', {}, f), t = marchTable(MARCH, MARCH === 'inversing' ? ((performance.now() - marchFrom) / 1000 / TURN_SECONDS) % 1 : 0);
+    ['feFuncR', 'feFuncG', 'feFuncB'].forEach(function (n) { el(n, { type: 'table', tableValues: t }, ct); });
+  }
+
+  function drawHalic(svg, P, tried) {
+    var defs = halicDefs(svg);
+    function clipOf(host) {                       /* the cell that holds a form: its light goes no further */
+      var id = 'h-clip-' + (gradSeq++), cp = el('clipPath', { id: id }, defs);
+      if (host) el('circle', { cx: host.cx, cy: host.cy, r: host.r }, cp);
+      else el('rect', { x: P.box.x, y: P.box.y, width: P.box.w, height: P.box.h }, cp);
+      return 'url(#' + id + ')';
+    }
+    /* the light is drawn in a layer of its own, so that the march can be laid on the light and on nothing else */
+    var names = svg, lights = el('g', {}, svg);
+    if (MARCH !== 'none') { marchFilter(defs, P); lights.setAttribute('filter', 'url(#march)'); }
+    svg = lights;
+    el('rect', { x: P.box.x, y: P.box.y, width: P.box.w, height: P.box.h, fill: HALF, 'pointer-events': 'none' }, svg);
+    /* the page, lit inside its margin, round */
+    el('rect', { x: P.box.x, y: P.box.y, width: P.box.w, height: P.box.h, fill: 'url(#h-in-' + (tried ? 'w' : 'b') + ')' }, svg);
+    (function cell(host) {
+      var kids = P.cuts.filter(function (c) { return c.host === host; });
+      if (!kids.length) return;
+      var clip = clipOf(host);
+      var yes = kids.filter(function (c) { return value(c.n, CASE); }), no = kids.filter(function (c) { return !value(c.n, CASE); });
+      yes.concat(no).forEach(function (c) {       /* the whites together, then the blacks */
+        el('circle', { cx: c.cx, cy: c.cy, r: c.r * (1 + GLOW), fill: 'url(#h-out-' + (value(c.n, CASE) ? 'w' : 'b') + ')',
+          'clip-path': clip, 'pointer-events': 'none' }, svg);
+      });
+      kids.forEach(function (c) {                 /* then each form: its own grey, and its own light from the rim in */
+        var holdsHere = value(c.n, CASE);
+        var base = el('circle', { cx: c.cx, cy: c.cy, r: c.r, fill: HALF, 'class': 'pick' }, svg);
+        var t = el('title', {}, base);
+        t.textContent = (c.scroll ? 'A scroll: "unless". ' : 'A cut: its contents are denied as a whole. ') +
+          (holdsHere ? 'In this case it comes out true, so its rim is lit white.' : 'In this case it comes out false, so its rim is lit black.');
+        base.addEventListener('click', function () { choose(c.n); });
+        el('circle', { cx: c.cx, cy: c.cy, r: c.r, fill: 'url(#h-in-' + (holdsHere ? 'w' : 'b') + ')', 'pointer-events': 'none' }, svg);
+        cell(c);
+      });
+    })(null);
+    svg = MARCH === 'inversing' ? lights : names;   /* on the verso the names turn over with the rest */
+    if (MARCH !== 'none' && !marching) { marching = true; requestAnimationFrame(marchTick); }
+    P.names.forEach(function (nm) {               /* a true name white, a false name black */
+      var t = el('text', { x: nm.x, y: nm.y, 'text-anchor': 'middle', 'dominant-baseline': 'central', 'font-size': P.F,
+        fill: CASE[nm.text] ? '#ffffff' : '#000000', 'class': 'pick' }, svg);
+      t.textContent = nm.text;
+      el('title', {}, t).textContent = 'Press to set ' + nm.text + ' true or false.';
+      t.addEventListener('click', function () { flip(nm.text); });
+    });
+  }
+
+  function grey(v) { v = Math.max(0, Math.min(255, Math.round(v))); var h = (v < 16 ? '0' : '') + v.toString(16); return '#' + h + h + h; }
+
+  var LASTP = null;
+  function drawSheet() {
+    /* a sheet with no names needs no case to be known: the blank sheet stands and the empty cut falls, and they
+       are drawn so, in every view, without anyone having to say */
+    var given = CASE;
+    if (!CASE && GOOD && !namesOf(GOOD).length) CASE = {};
+    try { drawPaper(); } finally { CASE = given; }
+    afterPaper();
+  }
+  function drawPaper() {
+    var svg = $('paper'), host = $('sheet');
+    while (svg.firstChild) svg.removeChild(svg.firstChild);
+    LASTP = null;
+    if (!GOOD) return;
+    /* the whole pane is the sheet: the paper takes the pane's own size and shape */
+    var availW = Math.max(160, host.clientWidth), availH = Math.max(120, host.clientHeight);
+    var P = picture(GOOD, MEASURE, { w: availW, h: availH });
+    LASTP = P;
+    svg.setAttribute('viewBox', '0 0 ' + P.paper.w.toFixed(3) + ' ' + P.paper.h.toFixed(3));
+    svg.setAttribute('width', availW);
+    svg.setAttribute('height', availH);
+
+    var tried = CASE ? holds(GOOD, CASE) : null;
+    var halic = VIEW === 'halic' && !!CASE, lines = VIEW === 'textbook';
+    /* the paper's edge is kept in every view: it marks the paper, and nothing in the logic */
+    el('rect', { x: P.paper.x, y: P.paper.y, width: P.paper.w, height: P.paper.h, fill: halic ? HALF : PAPER }, svg);
+    el('rect', { x: 0.5 / P.scale, y: 0.5 / P.scale, width: P.paper.w - 1 / P.scale, height: P.paper.h - 1 / P.scale, fill: 'none', stroke: EDGE, 'stroke-width': 1 / P.scale }, svg);
+    if (halic) { drawHalic(svg, P, tried); return; }
+
+    var m = el('rect', { x: P.box.x, y: P.box.y, width: P.box.w, height: P.box.h, fill: tried === null ? 'none' : tried ? PAGE_UP : PAGE_DOWN,
+      stroke: !lines ? 'none' : tried === null ? FAINT : tried ? STANDS : BROKEN, 'stroke-width': tried === null ? 0.7 : 1.4 }, svg);
+    if (tried === null) m.setAttribute('stroke-dasharray', '2 4');
+    else if (!tried) m.setAttribute('stroke-dasharray', '7 5');
+    var mt = el('title', {}, m); mt.textContent = 'The margin. Nothing touches the paper’s edge; a scroll standing on the sheet rests here.';
+
+    P.cuts.slice().sort(function (a, b) { return a.depth - b.depth; }).forEach(function (c) {
+      var fails = CASE ? !value(c.n, CASE) : false;
+      var tone = CASE ? (fails ? TINT : BLEACH) : (c.depth % 2 ? FILLED : PAPER);
+      /* In Bare there is no perimeter to part a true form from a true form that holds it: an eye inside a head of
+         the same bleach simply vanished. So in Bare each step inward goes a little further the same way, lighter
+         if true and darker if false, and a form can always be told from its holder. */
+      if (!lines && CASE) tone = grey((fails ? 138 : 230) + (fails ? -14 : 12) * (c.depth - 1));
+      var circ = el('circle', { cx: c.cx, cy: c.cy, r: c.r, fill: tone,
+        stroke: !lines ? 'none' : fails ? BROKEN : INK, 'stroke-width': fails ? 1.5 : 1.1, 'class': 'pick' }, svg);
+      if (fails) circ.setAttribute('stroke-dasharray', '6 4');
+      var t = el('title', {}, circ);
+      t.textContent = (c.scroll ? 'A scroll: "unless". ' : 'A cut: its contents are denied as a whole. ') +
+        (CASE ? (fails ? 'In this case it comes out false, so it is tinted' + (lines ? ' and drawn broken.' : '.') : 'In this case it comes out true, so it is bleached.')
+              : (c.depth % 2 ? 'Inside an odd number of cuts, so filled.' : 'Inside an even number of cuts, so back on the sheet’s side.')) +
+        (c.free ? ' A third scroll in one cell, drawn free.' : '');
+      circ.addEventListener('click', function () { choose(c.n); });
+    });
+    P.names.forEach(function (nm) {
+      var no = CASE && !CASE[nm.text];
+      var t = el('text', { x: nm.x, y: nm.y, 'text-anchor': 'middle', 'dominant-baseline': 'central', 'font-size': P.F,
+        fill: INK, 'fill-opacity': no ? 0.42 : 1, 'class': 'pick' }, svg);
+      t.textContent = nm.text;
+      if (no) t.setAttribute('text-decoration', 'line-through');
+      el('title', {}, t).textContent = 'Press to set ' + nm.text + ' true or false.';
+      t.addEventListener('click', function () { flip(nm.text); });
+    });
+    if (lines) P.cuts.forEach(function (c) {      /* the place where the pen did not lift */
+      if (c.touch) el('circle', { cx: c.touch.x, cy: c.touch.y, r: 2.6, fill: INK }, svg);
+      else if (c.free) el('circle', { cx: c.cx + c.r, cy: c.cy, r: 2.6, fill: PAPER, stroke: INK, 'stroke-width': 1 }, svg);
+    });
+  }
+
+  /* ---- SPHERE MUSIC (User1, 16 xi 2026): the pickup, the strip, the voice ---- */
+  var LAP = 1024, LOUD = 0.16, SLOW = 8;          /* samples in a lap; the loudest it gets; seconds a lap, seen and heard alike */
+  var TABLE = null, FILM = null, PHASE = 0, PLAYING = false, ENGAGED = false, lastTick = 0;
+  var AC = null, SOUND = false, T0 = 0, LAID_TO = 0;
+
+  /* the case a sheet is first heard in: the first in which it stands, or failing any, every name true */
+  function firstCase(sheet) {
+    var ns = namesOf(sheet), sols = solutions(sheet), cas = {};
+    if (sols && sols.length) { ns.forEach(function (x) { cas[x] = sols[0][x]; }); return { cas: cas, note: ' No case was on, so the first in which the sheet stands was taken.' }; }
+    ns.forEach(function (x) { cas[x] = true; });
+    return { cas: cas, note: ns.length ? ' No case was on, and the sheet stands in none, so every name was set true.' : '' };
+  }
+  /* The case a sheet opens in when it is put on the paper (User1, 17 xi 2026): the first in which it stands, if
+     there is one, in whatever view, so that every sheet arrives alive. A sheet that stands in no case arrives
+     plain; unless the music is playing, when it is given every name true so that there is something to hear. */
+  function openingCase(sheet) {
+    if (!namesOf(sheet).length) return null;
+    var sols = solutions(sheet);
+    if (sols && sols.length) return firstCase(sheet).cas;
+    return PLAYING ? firstCase(sheet).cas : null;
+  }
+  function afterPaper() {                         /* whenever the paper is drawn, the lap is read again */
+    var cas = CASE || (GOOD && !namesOf(GOOD).length ? {} : null);          /* a sheet with no names needs no case to be known */
+    TABLE = (LASTP && cas) ? lapTable(LASTP, GOOD, cas, LAP) : null;
+    if (!TABLE && PLAYING) haltMusic('Sphere Music stopped: no case is on, so nothing is lit.');
+    FILM = null;
+    if (TABLE) {
+      FILM = document.createElement('canvas'); FILM.width = LAP; FILM.height = 1;
+      var g = FILM.getContext('2d'), im = g.createImageData(LAP, 1);
+      for (var i = 0; i < LAP; i++) { var v = Math.round(128 + 127 * TABLE[i]); im.data[4 * i] = im.data[4 * i + 1] = im.data[4 * i + 2] = v; im.data[4 * i + 3] = 255; }
+      g.putImageData(im, 0, 0);
+      if (PLAYING) SYNCED = false;                /* the sheet or the case changed under the pickup: the score is laid again from where it is, at the next frame */
+    }
+    if (ENGAGED && TABLE && LASTP) {              /* the ambit and the pickup, on the paper */
+      var svg = $('paper'), A = ambitOf(LASTP);
+      el('ellipse', { cx: A.cx, cy: A.cy, rx: A.a, ry: A.b, fill: 'none', stroke: '#000', 'stroke-opacity': 0.28, 'stroke-width': 1.3, 'pointer-events': 'none' }, svg);
+      el('ellipse', { cx: A.cx, cy: A.cy, rx: A.a, ry: A.b, fill: 'none', stroke: '#fff', 'stroke-opacity': 0.8, 'stroke-width': 0.6, 'stroke-dasharray': '2 6', 'pointer-events': 'none' }, svg);
+      el('circle', { id: 'pickup', r: 4.2, fill: '#fff', stroke: '#000', 'stroke-width': 1.4, 'pointer-events': 'none' }, svg);
+      placePickup();
+    }
+    drawStrip();
+  }
+  function placePickup() {
+    var d = document.getElementById('pickup');
+    if (!d || !LASTP) return;
+    var q = ambitPoint(ambitOf(LASTP), PHASE);
+    d.setAttribute('cx', q.x.toFixed(2)); d.setAttribute('cy', q.y.toFixed(2));
+  }
+  function drawStrip() {                          /* one lap across the strip; what is at the gate is what the pickup is over, and what is heard */
+    var c = $('strip'), dpr = window.devicePixelRatio || 1, w = Math.max(60, Math.round(c.clientWidth * dpr)), h = Math.round(26 * dpr);
+    if (c.width !== w) c.width = w;
+    if (c.height !== h) c.height = h;
+    var g = c.getContext('2d');
+    g.fillStyle = '#808080'; g.fillRect(0, 0, w, h);
+    if (FILM) {
+      g.imageSmoothingEnabled = true;
+      var x0 = w / 2 - PHASE * w;                 /* where the start of the lap lies */
+      for (var k = -1; k <= 1; k++) g.drawImage(FILM, 0, 0, LAP, 1, x0 + k * w, 0, w, h);
+    }
+    g.fillStyle = '#000'; g.fillRect(Math.round(w / 2) - 1, 0, 1, h);        /* the gate */
+    g.fillStyle = '#fff'; g.fillRect(Math.round(w / 2), 0, 1, h);
+  }
+
+  /* THE VOICE, AND WHY IT IS BUILT THIS WAY. The first build laid the score on one oscillator and, to stop or to
+     change it, cancelled the curve in mid-course. Browsers do not agree on what that means: one of them has no
+     way to cancel and hold, and there my fallback failed inside the running curve, so that Stop did not give
+     silence (User1, on hearing it not stop). Nothing here now depends on cancelling anything.
+       - Every laying of the score makes a fresh voice: an oscillator, its loudness, and a fader of its own. The
+         old voice is faded out by its fader and let go. Curves are only ever laid on new, empty controls.
+       - One gate stands before the loudspeaker. It carries no curve at all, only "go to" and "come down", which
+         every browser does alike. Stop is the gate coming down. */
+  var GATE = null, WAVE = null, VOICE = null, LAPS = 45;      /* laps laid at one go: six minutes */
+  function soundUp() {                            /* made at the first Play, by the user's own hand, and not before */
+    if (AC) return SOUND;
+    try {
+      AC = new (window.AudioContext || window.webkitAudioContext)();
+      GATE = AC.createGain(); GATE.gain.value = 0; GATE.connect(AC.destination);
+      /* a soft voice: the tone, a little of its octave, less of its twelfth */
+      WAVE = AC.createPeriodicWave(new Float32Array([0, 0, 0, 0]), new Float32Array([0, 1, 0.26, 0.09]));
+      SOUND = true;
+    } catch (e) { SOUND = false; }
+    return SOUND;
+  }
+  function gate(open) { if (SOUND) GATE.gain.setTargetAtTime(open ? 1 : 0, AC.currentTime, open ? 0.02 : 0.035); }
+  function letGo(v, at) {                         /* fade a voice out by its own fader, then stop it */
+    try { v.fader.gain.setTargetAtTime(0, at, 0.012); v.osc.stop(at + 0.25); } catch (e) {}
+  }
+  /* The audio clock is the clock only while it is really running and the score laid on it is the one in force.
+     A browser may make the sound and then hold it suspended; then the film runs by the page's clock, silent,
+     and the score is laid the moment the sound wakes. */
+  var SYNCED = false;
+  function running() { return SOUND && AC.state === 'running'; }
+  function phaseNow() {
+    if (PLAYING && SYNCED && running()) { var p = ((AC.currentTime - T0) / SLOW) % 1; return p < 0 ? p + 1 : p; }
+    return PHASE;
+  }
+  /* The score is laid on a new voice's pitch and loudness as two curves, from the pickup's place onward, for the
+     rest of this lap and LAPS more. The audio clock then plays them to the sample, whatever the page is busy
+     with; the page only looks at that same clock to know where to draw the pickup. */
+  function lay(from) {
+    if (!SOUND || !TABLE) return;
+    var sc = scoreOf(TABLE), now = AC.currentTime, start = now + 0.03, i0 = Math.floor(from * LAP) % LAP, n = (LAP - i0) + LAPS * LAP;
+    var f = new Float32Array(n), g = new Float32Array(n);
+    for (var i = 0; i < n; i++) { var j = (i0 + i) % LAP; f[i] = sc.freq[j]; g[i] = LOUD * sc.gain[j]; }
+    var dur = n / LAP * SLOW, v;
+    try {
+      v = { osc: AC.createOscillator(), amp: AC.createGain(), fader: AC.createGain() };
+      v.osc.setPeriodicWave(WAVE); v.osc.frequency.value = f[0]; v.amp.gain.value = 0; v.fader.gain.value = 0;
+      v.osc.connect(v.amp); v.amp.connect(v.fader); v.fader.connect(GATE);
+      v.osc.frequency.setValueCurveAtTime(f, start, dur);
+      v.amp.gain.setValueCurveAtTime(g, start, dur);
+      v.fader.gain.setValueAtTime(0, start); v.fader.gain.linearRampToValueAtTime(1, start + 0.03);
+      v.osc.start(now);
+    } catch (e) { return; }
+    if (VOICE) letGo(VOICE, start);
+    VOICE = v;
+    T0 = start - (i0 / LAP) * SLOW; LAID_TO = start + dur;
+  }
+  function tick(now) {
+    if (!PLAYING) return;
+    if (running()) {
+      if (!SYNCED) { lay(PHASE); SYNCED = true; }                             /* the sound woke, or the score changed: lay it from here */
+      else { PHASE = phaseNow(); if (AC.currentTime > LAID_TO - SLOW) lay(PHASE); }     /* more score before it runs out */
+    } else { SYNCED = false; PHASE = (PHASE + (now - lastTick) / 1000 / SLOW) % 1; }
+    lastTick = now;
+    placePickup(); drawStrip();
+    requestAnimationFrame(tick);
+  }
+  function showMusic() { $('mu-play').classList.toggle('on', PLAYING); }
+  function playMusic() {
+    if (!GOOD) return;
+    if (PLAYING) { did('Sphere Music is playing already.'); return; }
+    var took = '';
+    if (!CASE && namesOf(GOOD).length) { var fc = firstCase(GOOD); CASE = fc.cas; took = fc.note; }    /* nothing is lit without a case */
+    var heard = soundUp();
+    ENGAGED = true; lastTick = performance.now();
+    drawSheet(); drawFoot();                      /* reads the lap; not yet playing, so nothing is laid twice */
+    PLAYING = true;
+    SYNCED = false;
+    if (heard) { if (AC.resume) AC.resume().catch(function () {}); gate(true); }
+    showMusic(); requestAnimationFrame(tick);
+    did('Sphere Music: playing.' + (heard ? (AC.state === 'running' ? '' : ' The browser is holding the sound back for the moment; the film runs meanwhile.') : ' This browser gave no sound device, so the film runs silent.') + took + ' The pickup sings the grey it is over: white high, black low, grey silent.');
+  }
+  function haltMusic(why) {
+    PHASE = phaseNow(); PLAYING = false; SYNCED = false;
+    ENGAGED = false;                              /* the ambit and the pickup leave the paper with the sound (User1) */
+    gate(false);                                  /* the gate comes down first, and by itself is silence */
+    if (SOUND && VOICE) { letGo(VOICE, AC.currentTime + 0.2); VOICE = null; }
+    showMusic(); if (why) did(why);
+  }
+  function stopMusic() {
+    if (!PLAYING) { did('Sphere Music was not playing.'); return; }
+    haltMusic(''); drawSheet();
+    did('Sphere Music: stopped, ' + Math.round(PHASE * 100) + ' hundredths of the way round. Play goes on from there.');
+  }
+  function rewindMusic() {
+    PHASE = 0;
+    if (!PLAYING) drawStrip(); else { SYNCED = false; placePickup(); drawStrip(); }
+    did('Sphere Music: rewound to the start of the lap' + (PLAYING ? ', and playing on.' : '.'));
+  }
+
+  /* the status bar says the last thing the user did, as status bars ever do */
+  function did(what) { $('status').textContent = what; }
+
+  /* a cut clicked on the paper is found in the line. (a name clicked is set true or false: see flip.) */
+  function choose(n) {
+    if (!SYNC || n.at === undefined) { did('The line is misspelt just now, so nothing in it could be chosen.'); return; }
+    var line = $('line');
+    line.focus();
+    line.setSelectionRange(n.at, n.end);
+    did('Chose ' + line.value.slice(n.at, n.end) + ' in the line.');
+  }
+
+  /* The words follow the sheet. But words the user has just formalized are left as they were written, for as
+     long as the sheet is the one they made: the page does not put its own phrasing over theirs. */
+  var MINE = null;                                /* the shape of the sheet the user's own words made, or none */
+  function drawWords() {
+    var w = $('words');
+    if (!GOOD) { w.value = ''; return; }
+    if (MINE !== shapeKey(GOOD)) { MINE = null; w.value = say(sense(GOOD)) + '.'; }
+    w.classList.toggle('old', !SYNC);
+  }
+  function doFormalize() {
+    var w = $('words'), sheet;
+    try { sheet = formalize(w.value); }
+    catch (e) {
+      if (!(e instanceof Misspelt)) throw e;
+      did('Could not formalize: ' + e.message + '. The sheet is left as it was.');
+      try { w.focus(); w.setSelectionRange(Math.min(e.at, w.value.length), w.value.length); } catch (x) {}
+      return;
+    }
+    MINE = shapeKey(sheet);
+    $('line').value = writeInline(sheet);
+    CASE = openingCase(sheet);
+    read();
+    did('Formalized: the words were set as a sheet.' + (CASE ? ' It is shown in the first case in which it stands.' : namesOf(sheet).length ? ' It stands in no case.' : ''));
+  }
+
+  /* ---- the column ---- */
+  function show(sheet) { return FORM === 'inline' ? writeInline(sheet) : writeDescended(sheet); }
+  function drawColumn() {
+    var list = $('list'), key = GOOD ? shapeKey(GOOD) : null;
+    list.textContent = '';
+    /* A sheet of the user's own, one that is none of the examples, has a card at the head of the column, washed
+       blue. It is the one place such a sheet can be seen descended. When the paper holds an example, the words
+       and the line already say all there is, and there is no such card. */
+    var among = EXAMPLES.some(function (ex) { return key === shapeKey(readInline(ex[1])); });
+    if (GOOD && !among) {
+      var mine = document.createElement('div'); mine.className = 'ex mine';
+      mine.title = 'The sheet now on the paper, which is your own and none of those below, as text.';
+      var ms = document.createElement('div'); ms.className = 'say'; ms.textContent = 'Yours, on the paper now:';
+      var mp = document.createElement('pre'); mp.textContent = show(GOOD);
+      mine.appendChild(ms); mine.appendChild(mp); list.appendChild(mine);
+    }
+    EXAMPLES.forEach(function (ex) {
+      var sheet = readInline(ex[1]);
+      var d = document.createElement('div'); d.className = 'ex' + (key === shapeKey(sheet) ? ' same' : '');
+      d.title = 'Put this sheet on the paper.';
+      var s = document.createElement('div'); s.className = 'say'; s.textContent = ex[0];
+      var p = document.createElement('pre'); p.textContent = FORM === 'inline' ? ex[1] : show(sheet);
+      d.appendChild(s); d.appendChild(p);
+      d.addEventListener('click', function () {
+        $('line').value = ex[1]; CASE = openingCase(sheet); read();
+        did('Put on the paper: ' + ex[0] + (CASE ? ' In the first case in which it stands.' : namesOf(sheet).length ? ' It stands in no case.' : ''));
+      });
+      list.appendChild(d);
+    });
+  }
+
+  /* ---- trying a case ---- */
+  var PLAINT = '';
+  /* setting a name true or false: by its button under the line, or by pressing the name itself on the paper */
+  function flip(name) {
+    if (!GOOD) return;
+    var ns = namesOf(GOOD);
+    if (!CASE) { CASE = {}; ns.forEach(function (x) { CASE[x] = true; }); did('Began a case: every name true. The sheet ' + (holds(GOOD, CASE) ? 'stands.' : 'falls.')); }
+    else { CASE[name] = !CASE[name]; did('Set ' + name + (CASE[name] ? ' true' : ' false') + '. The sheet ' + (holds(GOOD, CASE) ? 'stands.' : 'falls.')); }
+    drawSheet(); drawFoot();
+  }
+  var SOLS = null, SOLAT = -1;                   /* the cases in which the sheet stands, and which of them is on the paper */
+  function drawFoot() {
+    var chips = $('chips'), verdict = $('verdict'), sv = $('solve');
+    chips.textContent = ''; verdict.textContent = ''; verdict.classList.toggle('plaint', !!PLAINT);
+    SOLS = null; SOLAT = -1; sv.hidden = true;
+    if (!GOOD) { verdict.textContent = PLAINT; return; }
+    var ns = namesOf(GOOD), cen = census(GOOD);
+    ns.forEach(function (name) {
+      var b = document.createElement('button'); b.type = 'button';
+      var v = CASE ? CASE[name] : null;
+      b.textContent = name + (v === null ? '' : v ? ': true' : ': false');
+      if (v) b.className = 'on';
+      b.style.minWidth = 'calc(' + (name.length + 7) + 'ch + 22px)';         /* wide enough for "false" from the start, so nothing moves */
+      b.title = 'Try a case: set ' + name + ' true or false, and see whether the sheet stands. Pressing the name on the paper does the same.';
+      b.addEventListener('click', function () { flip(name); });
+      chips.appendChild(b);
+    });
+    if (CASE) {
+      var none = document.createElement('button'); none.type = 'button'; none.textContent = 'No case';
+      none.title = 'Leave off trying a case, and draw the sheet plain.';
+      none.addEventListener('click', function () {
+        var was = PLAYING; CASE = null; drawSheet(); drawFoot();
+        did(was ? 'Left off the case. Sphere Music stopped with it, since nothing is lit.' : 'Left off the case.');
+      });
+      chips.appendChild(none);
+    }
+    /* SOLVE (User1): step through the cases in which the sheet stands, so nobody has to hunt for them. The
+       count is of those cases, and the place among them is shown when the case on the paper is one of them.
+       Where the sheet stands in no case at all there is nothing to step through, and the button is absent.
+       It is one standing button at the end of the row, so it does not shift as the name buttons change. */
+    var sols = ns.length ? solutions(GOOD) : null;
+    if (sols && sols.length) {
+      SOLS = sols;
+      if (CASE) sols.forEach(function (c, i) { if (ns.every(function (x) { return c[x] === !!CASE[x]; })) SOLAT = i; });
+      sv.hidden = false;
+      sv.textContent = 'Solve (' + (SOLAT >= 0 ? (SOLAT + 1) + '/' : '') + sols.length + ')';
+      sv.title = 'Step through the ' + (sols.length === 1 ? 'one case' : sols.length + ' cases') + ' in which this sheet stands. Where a sheet stands in no case, this button is absent.';
+    }
+    var said = '';
+    if (CASE) said += 'In this case the sheet ' + (holds(GOOD, CASE) ? 'stands. ' : 'falls. ');
+    else if (ns.length) said += 'Press a name to try a case. ';
+    if (cen) {
+      if (!ns.length) said += cen.stands ? 'No names: the sheet stands.' : 'No names: the sheet falls.';
+      else said += 'It stands in ' + cen.stands + ' of the ' + cen.total + ' cases.';
+    }
+    verdict.textContent = PLAINT || said;
+    keep();
+  }
+  function solveNext() {
+    if (!SOLS || !SOLS.length || !GOOD) return;
+    var k = (SOLAT + 1) % SOLS.length, next = SOLS[k], n = SOLS.length;
+    CASE = {}; namesOf(GOOD).forEach(function (x) { CASE[x] = next[x]; });
+    drawSheet(); drawFoot();
+    did('Solve: case ' + (k + 1) + ' of ' + n + ' in which the sheet stands.');
+  }
+
+  /* ---- the line is read at every keystroke; a misspelling is named and the last good drawing stays ---- */
+  function read() {
+    var line = $('line'), text = line.value;
+    try {
+      var sheet = readInline(text);
+      GOOD = sheet; SYNC = true;
+      if (CASE) { var keep = {}; namesOf(sheet).forEach(function (n) { keep[n] = n in CASE ? CASE[n] : true; }); CASE = namesOf(sheet).length ? keep : null; }
+      PLAINT = ''; line.classList.remove('bad'); $('sheet').classList.remove('stale');
+    } catch (e) {
+      if (!(e instanceof Misspelt)) throw e;
+      SYNC = false;
+      PLAINT = 'Misspelt at place ' + (e.at + 1) + ': ' + e.message + '. The paper keeps the last sheet that read.';
+      line.classList.add('bad'); $('sheet').classList.add('stale');
+    }
+    drawColumn(); drawFoot(); drawWords();
+    drawSheet();                                  /* last, when the controls above have taken their height and the pane has its own */
+  }
+
+  function setForm(f) {
+    FORM = f;
+    $('f-in').classList.toggle('on', f === 'inline');
+    $('f-de').classList.toggle('on', f === 'descended');
+    drawColumn();                                 /* the column only. the paper is not touched. */
+    did('Column shown ' + f + '. The paper is not touched.');
+  }
+  /* KEPT, in this browser and nowhere else (User1, 17 xi 2026): the view, the last sheet that read, and such
+     trues and falses as had been given it, so that the page opens as it was left. Nothing is sent anywhere. */
+  var KEEP = 'homburg.last';
+  function keep() {
+    try {
+      if (!GOOD) return;
+      var last = JSON.parse(localStorage.getItem(KEEP) || '{}');
+      if (SYNC) last.line = $('line').value;
+      last.cas = CASE; last.view = VIEW; last.march = MARCH;
+      localStorage.setItem(KEEP, JSON.stringify(last));
+    } catch (e) {}
+  }
+  function kept() { try { return JSON.parse(localStorage.getItem(KEEP) || 'null'); } catch (e) { return null; } }
+
+  function setView(v) {
+    VIEW = v;
+    ['textbook', 'bare', 'halic'].forEach(function (x) { $('v-' + x).classList.toggle('on', x === v); });
+    drawSheet(); keep();
+    did('View: ' + v.charAt(0).toUpperCase() + v.slice(1) + '.' + (v === 'halic' && !CASE ? ' No case is on, so it shows the Bare picture. Press a name or Solve.' : ''));
+  }
+  ['textbook', 'bare', 'halic'].forEach(function (x) { $('v-' + x).addEventListener('click', function () { setView(x); }); });
+  function showMarch() { ['none', 'metal', 'inversing'].forEach(function (x) { $('m-' + x).classList.toggle('on', x === MARCH); }); }
+  function setMarch(kind) {
+    MARCH = kind; marchFrom = performance.now(); showMarch(); drawSheet(); keep();
+    var where = VIEW === 'halic' ? (CASE || !namesOf(GOOD).length ? '' : ' It shows once a case is on.') : ' It shows in Halic.';
+    did(kind === 'none' ? 'March: None. The light stands still.'
+      : kind === 'metal' ? 'March: Metal. Ripples run through the light.' + where
+      : 'March: Inversing. The light turns over and back; half way round is the same sheet read the other way.' + where);
+  }
+  ['none', 'metal', 'inversing'].forEach(function (x) { $('m-' + x).addEventListener('click', function () { setMarch(x); }); });
+  $('solve').addEventListener('click', solveNext);
+  $('formalize').addEventListener('click', doFormalize);
+  $('words').addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); doFormalize(); } });
+  $('mu-play').addEventListener('click', playMusic);
+  $('mu-stop').addEventListener('click', stopMusic);
+  $('mu-rew').addEventListener('click', rewindMusic);
+  $('f-in').addEventListener('click', function () { setForm('inline'); });
+  $('f-de').addEventListener('click', function () { setForm('descended'); });
+  $('line').addEventListener('input', function () { read(); did(SYNC ? 'Typed. The sheet reads.' : 'Typed. ' + PLAINT); });
+
+  var PANELS = ['about', 'rules', 'howto'];
+  function shutPanels() { PANELS.forEach(function (x) { $(x).hidden = true; $('m-' + x).classList.remove('on'); }); }
+  PANELS.forEach(function (id) {
+    var p = $(id), b = $('m-' + id);
+    b.addEventListener('click', function () {
+      var open = p.hidden;
+      shutPanels();
+      if (open) { p.hidden = false; b.classList.add('on'); p.scrollTop = 0; }
+      did((open ? 'Opened ' : 'Closed ') + b.textContent + '.');
+    });
+    p.querySelector('.x').addEventListener('click', function () { shutPanels(); did('Closed ' + b.textContent + '.'); });
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && PANELS.some(function (x) { return !$(x).hidden; })) { shutPanels(); did('Closed the panel.'); }
+  });
+
+  window.addEventListener('resize', drawSheet);
+  /* the paper is the pane, so whenever the pane changes its size, for whatever reason, the paper is drawn again */
+  if (window.ResizeObserver) {
+    var paneW = 0, paneH = 0;
+    new ResizeObserver(function () {
+      var h = $('sheet');
+      if (h.clientWidth === paneW && h.clientHeight === paneH) return;
+      paneW = h.clientWidth; paneH = h.clientHeight; drawSheet();
+    }).observe($('sheet'));
+  }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(drawSheet);
+
+  var was = kept(), opened = 'Ready.';
+  $('line').value = EXAMPLES[0][1];
+  CASE = openingCase(readInline(EXAMPLES[0][1]));
+  if (was && typeof was.line === 'string') {
+    try {
+      var names = namesOf(readInline(was.line));
+      $('line').value = was.line; CASE = null;
+      if (was.cas && typeof was.cas === 'object') { CASE = {}; names.forEach(function (n) { CASE[n] = was.cas[n] !== false; }); if (!names.length) CASE = null; }
+      opened = 'Opened as it was left.';
+    } catch (e) {}
+    if (was.view === 'bare' || was.view === 'halic' || was.view === 'textbook') {
+      VIEW = was.view;
+      ['textbook', 'bare', 'halic'].forEach(function (x) { $('v-' + x).classList.toggle('on', x === VIEW); });
+    }
+    if (was.march === true || was.march === 'metal') MARCH = 'metal';      /* true: how it was kept before there were kinds */
+    else if (was.march === 'inversing') MARCH = 'inversing';
+    showMarch();
+  }
+  read();
+  did(opened);
+})();
+</script>
+</body>
+</html>

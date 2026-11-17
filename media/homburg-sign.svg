@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="The sign of Homburg: two square brackets on a line, with a sheet of paper between them">
+  <rect width="64" height="64" rx="9" fill="#7e7e7e"/>
+  <rect x="26" y="21" width="12" height="22" fill="#d6d6d6"/>
+  <g fill="#262626">
+    <rect x="4" y="46" width="12" height="5"/><rect x="48" y="46" width="12" height="5"/>
+    <rect x="19" y="13" width="5" height="38"/><rect x="19" y="13" width="11" height="5"/><rect x="19" y="46" width="11" height="5"/>
+    <rect x="40" y="13" width="5" height="38"/><rect x="34" y="13" width="11" height="5"/><rect x="34" y="46" width="11" height="5"/>
+  </g>
+</svg>

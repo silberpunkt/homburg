@@ -1,0 +1,467 @@
+PROWL: THE SHEET AND THE SCROLL
+A way to type Peirce's existential graphs, in a line or down a page.
+Settled in conversation, 16 November 2026. User1's choices; set down by eniamb.
+Second setting, the same day: the closing ]_ , the two spaces, order,
+the turn, and the preclosed form.
+Third setting, the same day: the descended form as User1's eyes would have it.
+Fourth setting, the same day: __ for the scroll in the descended form.
+Fifth setting, the same day: the picture (border, margin, contact), what
+Sandeko drew, and Papa1's sheet.
+Since then, 17 November 2026: the page Homburg has been built on this
+notation. Its own About, Rules and Howto say what it does. This note stays
+as the account of how the notation was settled, and is not brought further.
+
+
+THE MARKS
+
+_[ ... ]_   the sheet. What stands on it is asserted.
+            Things side by side are asserted together ("and").
+( ... )     a cut. Its contents are denied as a whole.
+            Each part inside, taken alone, is neither asserted nor denied.
+_( ... )    the scroll: a cut drawn in one stroke with what holds it.
+            Same truth as a cut. It shows the reading "unless".
+
+Square for the sheet, since paper is square. Round for the cuts, since
+Peirce drew them round.
+
+The two underbars of the sheet are the line the paper lies on, showing at
+either side of it. The whole reads as if underlined. The underbar of the
+scroll is another thing: a binding on one side only, where the pen did not
+lift. So the sheet has ]_ and the scroll has no )_ .
+
+A sheet framed so and set down in prose is shown, and not sworn to by the
+one who writes the prose around it.
+
+
+RULES OF THE PEIRCE SHEET
+
+1. Both ends of the frame are required. _[ opens and ]_ closes, and
+   anything less is not a sheet. The close says "this is over", and lets a
+   reader or a program see that what was opened as Peirce's was closed as
+   Peirce's.
+
+2. Spaces are never imputed. A space is required in two places only:
+   between two names, and before every _( . The first is for the sense:
+   "rain wet" is two things and "rainwet" is one. The second is for the
+   eye. Everywhere else a space is air.
+
+3. Any run of spaces, tabs and line ends counts as one.
+
+4. Order on a level is air. The sheet has no left or right, so "c d b"
+   and "b d c" are one graph.
+
+5. A name does not end in an underbar.
+
+
+EXAMPLES
+
+    _[ ]_                           true (the blank sheet)
+    _[ () ]_                        false (the empty cut)
+    _[ a ]_                         assert: a
+    _[ (a) ]_                       deny: a
+    _[ _(a) ]_                      "the sheet is true, unless a" (User1)
+    _[ (p _(q)) ]_                  if p then q
+    _[ ( (p _(q)) (q _(p)) ) ]_     p or q, not both
+    _[ (p _(q)) (q _(p)) ]_         p exactly when q
+    _[ c d b (r) (z _(a)) ]_        c, d, b; not r; if z then a
+    _[ rain wet (dry) ]_            rain, wet, not dry
+    _[ rainwet (dry) ]_             one thing called rainwet, not dry
+
+
+THE SCROLL READ AS "UNLESS"
+
+_(x) has the truth of (x) wherever it stands. What it adds is a reading:
+"unless x", which is to say "and x is not so", said of whatever its
+holder is doing.
+
+  Held by a cut:      (p _(q))   p is denied, unless q.       So: if p then q.
+  Held by the sheet:  _(a)       the sheet stands, unless a.  So: not a.
+
+So (a) and _(a) on the sheet agree in truth and differ in sense. The first
+denies a outright. The second stakes the sheet on a's absence.
+Peirce himself derived denial from the scroll in this way: "not a" as
+"if a, then the absurd". (From memory, not looked up.)
+
+
+THE DOUBLE CUT
+
+Two cuts, one inside the other with nothing between, may be put on or
+taken off anywhere, and the graph says the same.
+
+    _[ ((p q)) ]_                   says   p q
+    _[ (((p q))) ]_                 says   not both p and q
+
+Put a guest in the ring and they no longer cancel; that is the scroll:
+
+    _[ (r _(p q)) ]_                says   if r then p and q
+
+
+AIR AND ORDER
+
+These four are one sheet. The first is as tight as the rules allow; the
+last is as a generous reader would still take it.
+
+    _[c d b(r)(z _(a))]_
+    _[c d b (r)(z _(a))]_
+    _[ c d b (r) (z _(a)) ]_
+    _[ c d    b (r) (z _(a)) ]_
+
+And so are these, since order on a level is air:
+
+    _[ b d c (z _(a)) (r) ]_
+    _[ (r) c ( _(a) z) b d ]_
+
+The tight form is for machines and for fences. The airy form is for people.
+
+
+THE TURN
+
+The line may turn the corner at a _( . A plain cut stays in the line; a
+scroll may open onto lines of its own. Its closing parenthesis falls in
+beside its holder's, and that )) is the typed picture of the two loops
+touching. The indent here is for the eye only; the parentheses do the work.
+
+    _[
+      c d b (r) (z _(
+        a
+      ))
+    ]_
+
+Read so, "(z _(" is "when z:", a guard with its body beneath. Two things in
+the body are both promised:
+
+    _[
+      c d b (r)
+      (z _(
+        a
+        e
+      ))
+    ]_
+
+That is: c, d, b; not r; if z then a and e. A scroll inside the body turns
+the corner again, one step deeper:
+
+    _[
+      (z _(
+        (y _(
+          a
+        ))
+      ))
+    ]_
+
+That is: if z, then if y then a.
+
+
+THE DESCENDED FORM (PRECLOSED)
+
+Close each pair at once, and let what it holds come after it and beneath
+it, as Python does. This is the form as ruled by User1's eyes, who asked one
+thing: "One complicated thing per line please." Tentative, 16 November 2026.
+
+  A line is either peers, or a headword leading the line and followed
+  by what it holds.
+  The headword also holds the lines indented beneath it.
+  () alone, with nothing after it and nothing beneath, is the empty cut.
+
+No pair holds anything between its own marks in this form: (r) is written
+() r , on a line of its own. So the marks are no longer brackets here but
+headwords, and each is two characters wide:
+
+  ()    "not:"       the cut. An egg.
+  __    "unless:"    the scroll. A stick: the stroke where the pen did
+                     not lift.
+
+Egg and stick, circle and line: User1's words for them, who saw in the
+pair the very forms of graphic design. __ for the scroll was asked for by
+his eyes and his fingers together.
+
+The left edge is a column of heads. Every line begins with a name or with
+a headword; the headword says at once that the rest of its line is under
+denial or under "unless"; and since both are two wide, what they hold
+lines up beneath one another.
+
+The sheet's head is _[]_ on a line of its own, so the blank sheet looks the
+same in both forms. __ is that hat with its brackets taken out.
+
+What __ costs: the round is gone, so that a scroll is still a cut must be
+learned and cannot be read off; the scroll now has two spellings, _( ) in
+a line and __ in descent; and one, two and three underbars differ only in
+length, which a program can tell and an eye may not. The long spelling
+_() says the same as __ and the sketch still reads it.
+
+True, and false:
+
+    _[]_
+
+    _[]_
+      ()
+
+Assert a; deny a; the sheet is true, unless a:
+
+    _[]_
+      a
+
+    _[]_
+      () a
+
+    _[]_
+      __ a
+
+If p then q:
+
+    _[]_
+      () p
+        __ q
+
+P or q, not both:
+
+    _[]_
+      ()
+        () p
+          __ q
+        () q
+          __ p
+
+P exactly when q:
+
+    _[]_
+      () p
+        __ q
+      () q
+        __ p
+
+C, d, b; not r; if z then a:
+
+    _[]_
+      c d b
+      () r
+      () z
+        __ a
+
+One step of indent is another sheet. With the last line moved to the left
+it says: c, d, b; not r; not z; and the sheet stands, unless a.
+
+    _[]_
+      c d b
+      () r
+      () z
+      __ a
+
+Two things promised. If z then a and e:
+
+    _[]_
+      c d b
+      () r
+      () z
+        __ a e
+
+A pair may also keep all it holds beneath it, and peers may be stacked,
+since the sheet has no direction. The first sheet again, at its tallest:
+
+    _[]_
+      c
+      d
+      b
+      ()
+        r
+      ()
+        z
+        __
+          a
+
+A scroll inside a scroll goes one step deeper. If z, then if y then a:
+
+    _[]_
+      () z
+        __
+          () y
+            __ a
+
+What changes in this form: the indent is no longer air but structure, so
+the text must be kept where its indent is safe (a fence, or YAML's bar).
+And the end is no longer marked by a closing sign; the sheet is over where
+the indent returns. The eye is trusted to catch it, as in YAML and Python.
+
+On User1's thought that the scroll is a quarter turn of the axis: in this
+form a scroll inside a cut always goes beneath, so a scroll always turns.
+But a plain cut inside a cut goes beneath as well, so it is not only the
+scroll that turns. Whether that tells against the thought, or only shows a
+page to be short of axes, is not settled.
+
+
+AN EARLIER DESCENT, SET ASIDE
+
+Before the eyes spoke, the same day: a complete pair such as (r) could
+stand among the peers on a line; only the last thing on a line could own
+the lines beneath; and an empty pair that was not last on its line was the
+empty cut, so that "() a" was false whatever a might be. Under the eyes'
+rule "() a" is "not a". The sketch no longer reads the earlier form.
+
+
+MISSPELLINGS
+
+In the inline form:
+
+  _[ c d b_(n) ]_       no space before _(
+  _[ a ]                no closing ]_
+  _[ p_ (q) ]_          a name ending in an underbar
+  _[ (p _(q) ]_         a cut left open
+  _[ (p __ q) ]_        the stick in a line; there the scroll is _( )
+
+In the descended form:
+
+  r ()                  the headword does not lead its line
+  c d b (r)             a pair among the peers
+  (r)                   a pair holding something between its marks
+  () z __ a             two complicated things on one line
+  _ a   or   ___ a      one underbar, or three; the stick is two
+  lines indented beneath a line of peers
+
+
+THE PICTURE
+
+How a sheet is drawn, when it is drawn. Ruled by User1, 16 November 2026.
+
+1. Whole border. No cut reaches the paper's edge, and none touches it.
+
+2. The sheet has a margin, and what stands on the sheet is set within it.
+   In type the margin is the air just inside the brackets, after _[ and
+   before ]_ .
+
+3. The underbar means contact. Each "unless" touches the inner wall of
+   its host. A cut has no margin, so its wall is its own line, and a
+   scroll inside a cut is drawn touching that line at one point. The
+   sheet's wall is its margin, and a scroll standing on the sheet rests
+   against the margin, never against the edge.
+
+The contact adds nothing in logic. It shows the reading: this one hangs on
+that one. The one contact Peirce drew was the same, the point where the two
+loops of his scroll meet, and he held that it meant nothing by itself.
+(From memory, not looked up.)
+
+Two things follow from the geometry, noted by eniamb. On a typed line every
+circle is centred on the one baseline, so an inner circle can touch its
+host only at the host's left or right end; the scroll must then stand last
+in its cell, as it does in (p _(q)), or first. In a free drawing, in the
+manner of a sangaku, any number of scrolls can each touch the wall at a
+point of their own, since order on the sheet is air.
+
+Nothing draws the contact yet. It is a rule for a picture still to be made.
+
+
+WHAT SANDEKO DREW
+
+Sandeko is User1's enclosure diagram in Nuage and in his text-entry box: a
+circle about each sentence and clause, the figures composed by difference
+so that overlaps cancel. Its own note, dated 4 November 2026, says:
+"Brackets are figures: ( ) a circle, [ ] a square". That is the choice
+made here twelve days later, round for the cut and square for the sheet,
+and nobody had told it about Peirce.
+
+User1 typed this sheet under it and sent an enlarged picture:
+
+    _[ (p _(q)) (q _(p)) ]_
+
+Seen in that picture by eniamb: a square about the sheet; two circles of
+one size about the two cuts, touching each other at the space between
+them; a small circle in each, about (q) and about (p), set well to the
+right; each small circle standing off from its outer wall by one
+character, which is the holder's own closing parenthesis; and each small
+disc darker than the body of the circle about it. Composition by
+difference is parity, the odd and even of the cuts, so the shade flips at
+every wall crossed. The shade of any one spot counted every figure of the
+surrounding talk as well, and so meant little by itself.
+
+Sandeko keeps every figure clear of every other. It draws what is inside
+what, and leaves the bond to the underbar.
+
+The two round eyes in the square head are an owl. User1 named him Ency.*
+PROWL had one in its name all along.
+*[User1 adds: Ency is short for Noctua Captimus, mousecatcher, named as imaginary brother of Athena's Noctua Nyctimene. The word 'tangency' includes him.]
+
+Under the descended form Sandeko rings only the headwords, since the eggs
+are closed before they hold anything and it does not read position. They
+come out as beads down the left edge.
+
+
+PAPA1'S SHEET
+
+User1's father asked him, when he was young, whether one could walk through
+a sheet of paper. "No," he said, after some consideration. They then cut a
+sheet carefully into what he now supposes was a Greek meander, so that it
+became one very extended border, and he walked through it. "The margin was
+unsevered, you see."
+
+That is the first rule of the picture, learned years before the name for
+it. The paper has only so much area, but the length of a cut inside it has
+no limit, and what a cut encloses can be as large as is needed. It works
+only while the border is whole: cut through to the edge once and there is
+a ribbon and no doorway. In User1's words, one may play any fooly-spooly
+with the interior, hazarding not our logic to fall out.
+
+
+CAUTIONS FOR MARKDOWN AND YAML (by the rules as recalled, not tested)
+
+Outside a fence, Markdown takes _[ ... ]_ for italics and eats both
+underbars. So in a .md file every sheet goes inside a fence (three
+backticks on a line of their own, above and below) or, within a sentence,
+between a pair of single backticks.
+Never let ]( touch; [..](..) is a link.
+Two sheets side by side want a space between them, or they meet as ]__[ .
+In YAML, put sheets under a bar, which leaves every line beneath it alone:
+
+  graph: |
+    _[ c d b (r) (z _(a)) ]_
+
+
+MARKS TRIED AND SET ASIDE
+
+.(    the full stop; Lisp's cons dot; Forth's dot-paren; Go, OCaml, Elixir.
+|(    regexp alternation, the shell's pipe, C's or; kin to Sheffer's stroke.
+~(    already means "not" in logic and C, and so makes a plain ( look like
+      mere grouping.
+S(    Peano's successor.
+$(    the shell, make, BASIC.
+_(    is used in programs by gettext and by underscore/lodash, not in prose.
+
+The mark _( was first called the souparen by User1, who then gave the name
+over to Peirce's own word, the scroll.
+
+
+WHOSE IS WHAT
+
+Ruled by User1: the square frame as the sheet; the name scroll; _( on the
+sheet read as "unless"; spaces never imputed; the space before _( ; the
+closing ]_ required; "(z _(" as "when z:"; order filed under the Rules of
+the Peirce Sheet. And, through his eyes and tentatively: one complicated
+thing per line; the headword leading its line; (r) written as () r with
+nothing else following; __ for the scroll in the descended form. And for
+the picture: the whole border; the sheet's margin; the underbar as contact,
+with the cut touched at its line and the sheet at its margin.
+
+Derived by eniamb and not yet ruled: _[]_ standing alone as the head of the
+descended form; a headword holding both the rest of its line and the lines
+beneath; whether the long spelling _() stays beside __ or goes; asking the
+space before _( even straight after a bracket in the inline form; what a
+name may be made of (the sketch takes letters and digits, with an underbar,
+apostrophe or hyphen allowed inside).
+
+
+WHAT WAS AND WAS NOT CHECKED
+
+Every sheet set as an example above (the lines indented four spaces) was
+read by the sketch program kept beside this note, in both forms. It tried
+every case for what each sheet says, found the inline and descended forms
+of each to be one sheet, found the tight, airy and reordered forms to be
+one sheet, and refused the misspellings. The readings in words beside the
+sheets were matched to the sketch's table by eniamb, not by the program.
+
+What Sandeko drew was seen by eniamb in one enlarged and brightened
+picture sent by User1, and was not measured. Sandeko's procedure was read
+and not run. No program yet draws a scroll touching its host.
+
+Everything said of Peirce, and of where the marks are already used, is
+from memory. Nothing was looked up on the day. What Markdown and YAML do
+with these forms was not tested in any program.
+
+eniamb, November 2026.
