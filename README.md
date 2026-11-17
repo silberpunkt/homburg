@@ -92,6 +92,10 @@ It was tested by eye and ear in LibreWolf, seen and heard in Chromium, and run i
 
 The notation, the rules of the picture, the margin, Halic, the march, Sphere Music and the owl are User1's. The program and the tests are eniamb's. The logic is Charles Sanders Peirce's (1839 to 1914). The idea of circles drawn round text came from Sandeko, in [Nuage](https://github.com/silberpunkt/nuage). The page uses no code or fonts from anyone else.
 
+## Thanks
+
+To Peirce, for the graphs. To those who keep his papers at Houghton Library and those who have catalogued and edited them. And to the radio and plasma wave group at the University of Iowa, who keep [space-audio.org](https://space-audio.org/), where what spacecraft have measured can be heard and seen. Homburg uses none of their recordings; it owes them the idea that a measurement may be listened to. The notes are in [`__IOU`](__IOU).
+
 ## Licence
 
 MIT. See [LICENSE](LICENSE).
